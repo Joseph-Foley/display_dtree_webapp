@@ -18,6 +18,8 @@ DATA_PATH = '../Data/Telco data TC fix.csv'
 TREE_DEPTH = 3
 PROB = 'regression'
 NUMERICS = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
+UNIQUE_THRESH = 0.5
+MAX_CLASSES = 10
 
 class_names = None
 
@@ -67,21 +69,30 @@ def catOrNum(df, NUMERICS):
     
     return dtype_dict
 
-def getClassNames(df, response):
+def getClassNames(df, response, MAX_CLASSES):
     '''
     Get the class names of a classification problem
     '''
     if PROB == 'regression':
         class_names = None
     else:
-        pass
+        class_names = list(df[response].unique())
+        
+        if len(class_names) > MAX_CLASSES:
+            print(f'\nResponse variable contains over {MAX_CLASSES} classes.',
+                  f'\nPlease limit you response variable to {MAX_CLASSES}',
+                   'or less.')
     
     return class_names
 
-def dropUniques(df, UNIQUE_THRESH)@:
+def dropUniques(df, dtype_dict, UNIQUE_THRESH):
     '''
-    drop catecorical columns that have too many unique values.
+    drop categorical columns that have too many unique values.
+    UNIQUE_THRESH: % of col that must not be unique
     '''
+    for col i dtype_dict['cat']:
+    
+    return df
 
 def processData(df):
     '''
@@ -128,7 +139,7 @@ if __name__ =='__main__':
     response = pickResponse(cols)
     class_names = getClassNames(df, response)
     dtype_dict = catOrNum(df, NUMERICS)
-    print(dtype_dict)
+    print('\n', dtype_dict, '\n')
 # =============================================================================
 #bike
 #     df = df.drop(['casual',
