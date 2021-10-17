@@ -5,6 +5,7 @@ Backend of the project. This will make the dtree model and generate the plot
 # =============================================================================
 # IMPORTS
 # =============================================================================
+import sys
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor,\
@@ -14,12 +15,14 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor,\
 # =============================================================================
 # CONSTANTS
 # =============================================================================
+PROB = 'classification'
 DATA_PATH = '../Data/Telco data TC fix.csv'
 TREE_DEPTH = 3
-PROB = 'regression'
 NUMERICS = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
-UNIQUE_THRESH = 0.5
+UNIQUE_THRESH = 0.2
+MAKE_NUM_THRESH = 0.95
 MAX_CLASSES = 10
+
 
 class_names = None
 
@@ -82,15 +85,48 @@ def getClassNames(df, response, MAX_CLASSES):
             print(f'\nResponse variable contains over {MAX_CLASSES} classes.',
                   f'\nPlease limit you response variable to {MAX_CLASSES}',
                    'or less.')
+            
+            sys.exit()
     
     return class_names
+
+def makeNumeric(df, dtype_dict, MAKE_NUM_THRESH):
+    '''
+    If col has more numeric values than non-numeric then make it numeric
+    MAKE_NUM_THRESH: % of rows that are actually numeric
+    '''
+    for col in dtype_dict['cat']:
+        #find strings, if item is not a string then it will return NaN
+        num_bool = df[col].str.contains('').isna()
+        
+        #Check thresh
+        if num_bool.sum() / len(df) > MAKE_NUM_THRESH:
+            
+            #remove string rows
+            df = df[num_bool]
+            
+            #change what is recorded in dict
+            dtype_dict['num'].append(col)
+            dtype_dict['cat'].remove(col)
+            
+    return df, dtype_dict
+            
 
 def dropUniques(df, dtype_dict, UNIQUE_THRESH):
     '''
     drop categorical columns that have too many unique values.
     UNIQUE_THRESH: % of col that must not be unique
     '''
-    for col i dtype_dict['cat']:
+    dropped = []
+    for col in dtype_dict['cat']:
+        if df[col].nunique()/len(df) > UNIQUE_THRESH:
+            df.drop(col, axis=1)
+            dropped.append(col)
+            
+    if len(dropped) > 0:
+        print('The following columns have been dropped as they contained too',
+              f'many unique categories: \n{dropped}',
+              '\nWas this column meant to be categorical?')
     
     return df
 
@@ -137,9 +173,16 @@ if __name__ =='__main__':
     
     cols = getColumns(df)
     response = pickResponse(cols)
-    class_names = getClassNames(df, response)
+    class_names = getClassNames(df, response, MAX_CLASSES)
+    
     dtype_dict = catOrNum(df, NUMERICS)
     print('\n', dtype_dict, '\n')
+    
+    
+    df, dtype_dict = makeNumeric(df, dtype_dict, MAKE_NUM_THRESH)
+    
+    
+    df = dropUniques(df, dtype_dict, UNIQUE_THRESH)
 # =============================================================================
 #bike
 #     df = df.drop(['casual',
