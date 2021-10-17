@@ -14,9 +14,10 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor,\
 # =============================================================================
 # CONSTANTS
 # =============================================================================
-DATA_PATH = '../Data/Bike share data (Featurised).csv'
+DATA_PATH = '../Data/Telco data TC fix.csv'
 TREE_DEPTH = 3
 PROB = 'regression'
+NUMERICS = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
 
 class_names = None
 
@@ -56,10 +57,14 @@ def pickResponse(cols):
     
     return response
     
-def catOrCont(df):
+def catOrNum(df, NUMERICS):
     '''
     Determine which columns are categorical and which are not
     '''
+    dtype_dict = {}
+    dtype_dict['num'] = list(df.select_dtypes(include=NUMERICS).columns)
+    dtype_dict['cat'] = list(df.select_dtypes(exclude=NUMERICS).columns)
+    
     return dtype_dict
 
 def getClassNames(df, response):
@@ -72,6 +77,11 @@ def getClassNames(df, response):
         pass
     
     return class_names
+
+def dropUniques(df, UNIQUE_THRESH)@:
+    '''
+    drop catecorical columns that have too many unique values.
+    '''
 
 def processData(df):
     '''
@@ -88,7 +98,8 @@ def trainTree(df, PROB, response):
         dtree = DecisionTreeRegressor(max_depth=TREE_DEPTH)
         
     elif PROB == 'classification':
-        dtree = DecisionTreeClassifier(max_depth=TREE_DEPTH)
+        dtree = DecisionTreeClassifier(max_depth=TREE_DEPTH,\
+                                       class_weight='balanced')
         
     else:
         print('\n\n\n!!! PROB must be regression or classification !!!\n\n\n')
@@ -112,9 +123,21 @@ def genTree(dtree):
 # =============================================================================
 if __name__ =='__main__':
     df = loadData(DATA_PATH)
+    
     cols = getColumns(df)
     response = pickResponse(cols)
     class_names = getClassNames(df, response)
+    dtype_dict = catOrNum(df, NUMERICS)
+    print(dtype_dict)
+# =============================================================================
+#bike
+#     df = df.drop(['casual',
+#  'registered',
+#  'count cox',
+#  'casual cox',
+#  'registered cox'], axis=1)
+# =============================================================================
+    
     dtree = trainTree(df, PROB, response)
     genTree(dtree)
     
