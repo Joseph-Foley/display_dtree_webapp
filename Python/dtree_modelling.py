@@ -133,7 +133,7 @@ def dropUniques(df, dtype_dict, UNIQUE_THRESH):
 def limitCats(df, dtype_dict, CAT_LIMIT):
     '''
     Categorical variables can only have up to CAT_LIMIT catergories. Uncommon
-    categories will be badged as "zzzOTHER"
+    categories will be badged as "AAAOTHER"
     '''
     for col in dtype_dict['cat']:
         #check if exceeds limit
@@ -146,11 +146,17 @@ def limitCats(df, dtype_dict, CAT_LIMIT):
             
             #change name of least frequent cats
             least_freq = list(val_counts.iloc[CAT_LIMIT - 1:].index)
-            df[col][df[col].isin(least_freq)] = 'zzzOther'
+            df[col][df[col].isin(least_freq)] = 'AAAOther'
             
     return df
 
-
+def dummyVars(df, dtype_dict):
+    '''
+    create dummy variables from categoricals.
+    AAAOther and first object in alphabetical order to be dropped. (helps 
+    remove "No" in Yes/No columns)
+    '''
+    return df.get_dummies(df, columns=dtype_dict['cat'], drop_first=True)
 
 def processData(df):
     '''
@@ -205,6 +211,10 @@ if __name__ =='__main__':
     
     
     df = dropUniques(df, dtype_dict, UNIQUE_THRESH)
+    
+    df = limitCats(df, dtype_dict, CAT_LIMIT)
+    
+    df = dummyVars(df, dtype_dict)
 # =============================================================================
 #bike
 #     df = df.drop(['casual',
