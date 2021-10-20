@@ -22,7 +22,7 @@ NUMERICS = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
 UNIQUE_THRESH = 0.2
 MAKE_NUM_THRESH = 0.95
 MAX_CLASSES = 10
-
+CAT_LIMIT = 3
 
 class_names = None
 
@@ -129,6 +129,28 @@ def dropUniques(df, dtype_dict, UNIQUE_THRESH):
               '\nWas this column meant to be categorical?')
     
     return df
+
+def limitCats(df, dtype_dict, CAT_LIMIT):
+    '''
+    Categorical variables can only have up to CAT_LIMIT catergories. Uncommon
+    categories will be badged as "zzzOTHER"
+    '''
+    for col in dtype_dict['cat']:
+        #check if exceeds limit
+        if df[col].nunique() <= CAT_LIMIT - 1:
+            continue
+        
+        else:
+            #find least frequent cats
+            val_counts = df[col].value_counts()#.sort_index(ascending=False)
+            
+            #change name of least frequent cats
+            least_freq = list(val_counts.iloc[CAT_LIMIT - 1:].index)
+            df[col][df[col].isin(least_freq)] = 'zzzOther'
+            
+    return df
+
+
 
 def processData(df):
     '''
