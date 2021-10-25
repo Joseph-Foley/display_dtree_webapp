@@ -184,7 +184,7 @@ def limitCats(df, dtype_dict, CAT_LIMIT):
             
     return df
 
-def ordinalResponse(df, response, dtype_dict, PROB):
+def ordinalResponse(df, class_names, dtype_dict, PROB):
     '''
     response var in categorical problems needs to be in ordinal format
     e.g. red, green, blue => 0, 1, 2
@@ -194,10 +194,8 @@ def ordinalResponse(df, response, dtype_dict, PROB):
     
     elif PROB == 'classification':
         #make map
-        response_vals = list(df[response].unique())
-        response_vals.sort()
-        ord_map = pd.Series(index=response_vals,\
-                            data=range(df[response].nunique()))
+        ord_map = pd.Series(index=class_names,\
+                            data=range(len(class_names)))
             
         #apply map
         df[response] = df[response].replace(ord_map)
@@ -246,7 +244,7 @@ def trainTree(df, PROB, response):
     
     return dtree
 
-def genTree(dtree):
+def genTree(dtree, class_names):
     '''
     generates (& displays) a drawn dtree
     '''
@@ -282,7 +280,7 @@ if __name__ =='__main__':
     
     df = limitCats(df, dtype_dict, CAT_LIMIT)
     
-    df, dtype_dict = ordinalResponse(df, response, dtype_dict, PROB)
+    df, dtype_dict = ordinalResponse(df, class_names, dtype_dict, PROB)
     
     df = dummyVars(df, dtype_dict)
 # =============================================================================
