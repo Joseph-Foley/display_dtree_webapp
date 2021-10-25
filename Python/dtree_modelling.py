@@ -23,8 +23,12 @@ UNIQUE_THRESH = 0.2
 MAKE_NUM_THRESH = 0.95
 MAX_CLASSES = 10
 CAT_LIMIT = 3
+COL_LIMIT = 100
 
-class_names = None
+#class_names = None
+
+
+#assert MAX_CLASSES <= CAT_LIMIT
 
 # =============================================================================
 # FUNCTIONS
@@ -46,6 +50,14 @@ def getColumns(df):
     cols = list(df.columns)
     
     return cols
+
+def checkColLimit(cols, COL_LIMIT):
+    '''
+    Number of columns must not exceed limit
+    '''
+    if len(cols) > COL_LIMIT:
+        print('\nCOLUMN LIMIT EXCEEDED\nPLEASE LIMIT YOUR DATA TO 100 COLUMNS')
+        sys.exit()
 
 def pickResponse(cols):
     '''
@@ -111,6 +123,19 @@ def makeNumeric(df, dtype_dict, MAKE_NUM_THRESH):
             
     return df, dtype_dict
             
+def checkRegResponse(df, response, dtype_dict, PROB):
+    '''
+    if there still too many non numerical columns in regression response then
+    terminate.
+    '''
+    if PROB == 'regression'\
+    and response in dtype_dict['cat']:
+        
+        print('\nResponse variable has too many non numerical values,\n',
+              'Are you sure this is a regression problem,\n',
+              'If so then edit the response column so that it only contains ',
+              'numerical values\n')
+        
 
 def dropUniques(df, dtype_dict, UNIQUE_THRESH):
     '''
@@ -118,7 +143,7 @@ def dropUniques(df, dtype_dict, UNIQUE_THRESH):
     UNIQUE_THRESH: % of col that must not be unique
     '''
     dropped = []
-    for col in dtype_dict['cat']:
+    for col in dtype_dict['cat']:       
         if df[col].nunique()/len(df) > UNIQUE_THRESH:
             df.drop(col, axis=1)
             dropped.append(col)
@@ -128,13 +153,12 @@ def dropUniques(df, dtype_dict, UNIQUE_THRESH):
               f'many unique categories: \n{dropped}',
               '\nWas this column meant to be categorical?')
     
-    #TODO prevent response col from being dropped
     
     return df
 
 def limitCats(df, dtype_dict, CAT_LIMIT):
     '''
-    Categorical variables can only have up to CAT_LIMIT catergories. Uncommon
+    Categorical variables can only have up to CAT_LIMIT categories. Uncommon
     categories will be badged as "AAAOTHER"
     '''
     for col in dtype_dict['cat']:
@@ -226,18 +250,24 @@ def genTree(dtree):
 # EXECUTE
 # =============================================================================
 if __name__ =='__main__':
+    #load df
     df = loadData(DATA_PATH)
     
+    #get column names
     cols = getColumns(df)
+    
+    #user picks response column
     response = pickResponse(cols)
+    
+    #get class names if classification
     class_names = getClassNames(df, response, MAX_CLASSES)
     
     dtype_dict = catOrNum(df, NUMERICS)
     print('\n', dtype_dict, '\n')
     
-    
     df, dtype_dict = makeNumeric(df, dtype_dict, MAKE_NUM_THRESH)
     
+    checkRegResponse(df, response, dtype_dict, PROB)
     
     df = dropUniques(df, dtype_dict, UNIQUE_THRESH)
     
