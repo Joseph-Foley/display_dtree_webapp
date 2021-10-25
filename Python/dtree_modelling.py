@@ -15,10 +15,10 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor,\
 # =============================================================================
 # CONSTANTS
 # =============================================================================
-#PROB = 'classification'
-PROB = 'regression'
-#DATA_PATH = '../Data/Telco data TC fix.csv'
-DATA_PATH = '../Data/Bike share data (atemp-weather fix).csv'
+PROB = 'classification'
+#PROB = 'regression'
+DATA_PATH = '../Data/Telco data TC fix.csv'
+#DATA_PATH = '../Data/Bike share data (atemp-weather fix).csv'
 TREE_DEPTH = 3
 NUMERICS = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
 UNIQUE_THRESH = 0.2
@@ -101,6 +101,8 @@ def getClassNames(df, response, MAX_CLASSES):
                    'or less.')
             
             sys.exit()
+            
+        class_names.sort()
     
     return class_names
 
@@ -137,6 +139,8 @@ def checkRegResponse(df, response, dtype_dict, PROB):
               'Are you sure this is a regression problem,\n',
               'If so then edit the response column so that it only contains ',
               'numerical values\n')
+        
+        sys.exit()
         
 
 def dropUniques(df, dtype_dict, UNIQUE_THRESH):
@@ -219,6 +223,7 @@ def dummyVars(df, dtype_dict):
 def processData(df):
     '''
     Combines preprocessing functions to make data ready for modelling
+    checkRegResponse might need to be outside this tho
     '''
     return df
 
