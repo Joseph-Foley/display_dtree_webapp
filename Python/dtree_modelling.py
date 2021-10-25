@@ -128,6 +128,8 @@ def dropUniques(df, dtype_dict, UNIQUE_THRESH):
               f'many unique categories: \n{dropped}',
               '\nWas this column meant to be categorical?')
     
+    #TODO prevent response col from being dropped
+    
     return df
 
 def limitCats(df, dtype_dict, CAT_LIMIT):
@@ -150,14 +152,42 @@ def limitCats(df, dtype_dict, CAT_LIMIT):
             
     return df
 
+def ordinalResponse(df, response, dtype_dict, PROB):
+    '''
+    response var in categorical problems needs to be in ordinal format
+    e.g. red, green, blue => 0, 1, 2
+    '''
+    if PROB == 'regression':
+        pass
+    
+    elif PROB == 'classification':
+        #make map
+        response_vals = list(df[response].unique())
+        response_vals.sort()
+        ord_map = pd.Series(index=response_vals,\
+                            data=range(df[response].nunique()))
+            
+        #apply map
+        df[response] = df[response].replace(ord_map)
+            
+        #remove from cats
+        dtype_dict['cat'].remove(response)
+        dtype_dict['num'].append(response)
+        
+    else:
+        print('\n\n\n!!! PROB must be regression or classification !!!\n\n\n') 
+        
+        
+    return df, dtype_dict
+        
 def dummyVars(df, dtype_dict):
     '''
     create dummy variables from categoricals.
     AAAOther and first object in alphabetical order to be dropped. (helps 
     remove "No" in Yes/No columns)
     '''
-    return df.get_dummies(df, columns=dtype_dict['cat'], drop_first=True)
-
+    return pd.get_dummies(df, columns=dtype_dict['cat'], drop_first=True)
+        
 def processData(df):
     '''
     Combines preprocessing functions to make data ready for modelling
@@ -173,8 +203,7 @@ def trainTree(df, PROB, response):
         dtree = DecisionTreeRegressor(max_depth=TREE_DEPTH)
         
     elif PROB == 'classification':
-        dtree = DecisionTreeClassifier(max_depth=TREE_DEPTH,\
-                                       class_weight='balanced')
+        dtree = DecisionTreeClassifier(max_depth=TREE_DEPTH)
         
     else:
         print('\n\n\n!!! PROB must be regression or classification !!!\n\n\n')
@@ -213,6 +242,8 @@ if __name__ =='__main__':
     df = dropUniques(df, dtype_dict, UNIQUE_THRESH)
     
     df = limitCats(df, dtype_dict, CAT_LIMIT)
+    
+    df, dtype_dict = ordinalResponse(df, response, dtype_dict, PROB)
     
     df = dummyVars(df, dtype_dict)
 # =============================================================================
