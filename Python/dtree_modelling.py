@@ -251,7 +251,7 @@ def genTree(dtree, class_names):
     plt.figure(figsize=(20, 12)) 
     plot_tree(dtree, feature_names=df.drop(response, axis=1).columns,\
               class_names=class_names, filled=True, rounded=True, precision=2,\
-              proportion=True)
+              proportion=True, impurity=False)
         
 # =============================================================================
 # EXECUTE
@@ -293,6 +293,6 @@ if __name__ =='__main__':
 # =============================================================================
     
     dtree = trainTree(df, PROB, response)
-    genTree(dtree)
+    genTree(dtree, class_names)
     
     
