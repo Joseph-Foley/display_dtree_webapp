@@ -15,8 +15,10 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor,\
 # =============================================================================
 # CONSTANTS
 # =============================================================================
-PROB = 'classification'
-DATA_PATH = '../Data/Telco data TC fix.csv'
+#PROB = 'classification'
+PROB = 'regression'
+#DATA_PATH = '../Data/Telco data TC fix.csv'
+DATA_PATH = '../Data/Bike share data (atemp-weather fix).csv'
 TREE_DEPTH = 3
 NUMERICS = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
 UNIQUE_THRESH = 0.2
@@ -145,16 +147,18 @@ def dropUniques(df, dtype_dict, UNIQUE_THRESH):
     dropped = []
     for col in dtype_dict['cat']:       
         if df[col].nunique()/len(df) > UNIQUE_THRESH:
-            df.drop(col, axis=1)
+            df = df.drop(col, axis=1)
             dropped.append(col)
+            
+            dtype_dict['cat'].remove(col)
             
     if len(dropped) > 0:
         print('The following columns have been dropped as they contained too',
               f'many unique categories: \n{dropped}',
-              '\nWas this column meant to be categorical?')
+              '\nWas this column meant to be categorical?\n')
     
     
-    return df
+    return df, dtype_dict
 
 def limitCats(df, dtype_dict, CAT_LIMIT):
     '''
@@ -269,7 +273,7 @@ if __name__ =='__main__':
     
     checkRegResponse(df, response, dtype_dict, PROB)
     
-    df = dropUniques(df, dtype_dict, UNIQUE_THRESH)
+    df, dtype_dict = dropUniques(df, dtype_dict, UNIQUE_THRESH)
     
     df = limitCats(df, dtype_dict, CAT_LIMIT)
     
