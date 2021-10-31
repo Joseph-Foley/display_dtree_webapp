@@ -17,6 +17,7 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor,\
 # =============================================================================
 PROB = 'classification'
 #PROB = 'regression'
+#DATA_PATH = '../Data/Telco data TC fix_resp_int.csv'
 DATA_PATH = '../Data/Telco data TC fix.csv'
 #DATA_PATH = '../Data/Bike share data (atemp-weather fix).csv'
 TREE_DEPTH = 3
@@ -24,7 +25,7 @@ NUMERICS = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
 UNIQUE_THRESH = 0.2
 MAKE_NUM_THRESH = 0.95
 MAX_CLASSES = 10
-CAT_LIMIT = 3
+CAT_LIMIT = 10
 COL_LIMIT = 100
 
 #class_names = None
@@ -58,7 +59,8 @@ def checkColLimit(cols, COL_LIMIT):
     Number of columns must not exceed limit
     '''
     if len(cols) > COL_LIMIT:
-        print('\nCOLUMN LIMIT EXCEEDED\nPLEASE LIMIT YOUR DATA TO 100 COLUMNS')
+        print('\nCOLUMN LIMIT EXCEEDED',
+              f'\nPLEASE LIMIT YOUR DATA TO {COL_LIMIT} COLUMNS')
         sys.exit()
 
 def pickResponse(cols):
@@ -75,6 +77,15 @@ def pickResponse(cols):
     print(response)
     
     return response
+
+def makeRespStr(df, response, PROB):
+    if PROB == 'classification':
+        df[response] = df[response].astype(str)
+        
+    else:
+        pass
+    
+    return df
     
 def catOrNum(df, NUMERICS):
     '''
@@ -266,9 +277,12 @@ if __name__ =='__main__':
     #user picks response column
     response = pickResponse(cols)
     
+    #make response col dtype string if classification
+    df = makeRespStr(df, response, PROB)
+    
     #get class names if classification
     class_names = getClassNames(df, response, MAX_CLASSES)
-    
+     
     dtype_dict = catOrNum(df, NUMERICS)
     print('\n', dtype_dict, '\n')
     
