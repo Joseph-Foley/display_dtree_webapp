@@ -17,14 +17,15 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor,\
 #DATA_PATH = '../Data/Telco data TC fix_resp_int.csv'
 #DATA_PATH = '../Data/Telco data TC fix.csv'
 #DATA_PATH = '../Data/Bike share data (atemp-weather fix).csv'
-DATA_PATH = '../Data/School_Attendance.csv'
-
+#DATA_PATH = '../Data/School_Attendance.csv'
+#DATA_PATH = '../Data/T20 International Dataset_SMALL.csv'
+DATA_PATH = '../Data/titanic_data.csv'
 
 # =============================================================================
 # CONSTANTS
 # =============================================================================
-#PROB = 'classification'
-PROB = 'regression'
+PROB = 'classification'
+#PROB = 'regression'
 TREE_DEPTH = 3
 NUMERICS = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
 UNIQUE_THRESH = 0.2
@@ -146,6 +147,10 @@ def makeNumeric(df, dtype_dict, MAKE_NUM_THRESH):
     MAKE_NUM_THRESH: % of rows that are actually numeric
     '''
     for col in dtype_dict['cat']:
+        #convert bool cols to str
+        if df[col].dtype == 'bool':
+            df[col] = df[col].astype(str)
+        
         #find strings, if item is not a string then it will return NaN
         num_bool = df[col].str.contains('').isna()
         
@@ -176,7 +181,6 @@ def checkRegResponse(df, response, dtype_dict, PROB):
         
         sys.exit()
         
-
 def dropUniques(df, dtype_dict, UNIQUE_THRESH):
     '''
     drop categorical columns that have too many unique values.
@@ -194,7 +198,7 @@ def dropUniques(df, dtype_dict, UNIQUE_THRESH):
     if len(dropped) > 0:
         print('The following columns have been dropped as they contained too',
               f'many unique categories: \n{dropped}',
-              '\nWas they meant to be categorical?\n')
+              '\nWere they meant to be categorical?\n')
     
     
     return df, dtype_dict
@@ -283,6 +287,7 @@ def genTree(dtree, class_names):
     '''
     generates (& displays) a drawn dtree
     '''
+    #TODO test figsize on variety of screens
     plt.figure(figsize=(20, 12)) 
     plot_tree(dtree, feature_names=df.drop(response, axis=1).columns,\
               class_names=class_names, filled=True, rounded=True, precision=2,\
