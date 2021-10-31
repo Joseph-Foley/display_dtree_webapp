@@ -16,7 +16,9 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor,\
 # =============================================================================
 #DATA_PATH = '../Data/Telco data TC fix_resp_int.csv'
 #DATA_PATH = '../Data/Telco data TC fix.csv'
-DATA_PATH = '../Data/Bike share data (atemp-weather fix).csv'
+#DATA_PATH = '../Data/Bike share data (atemp-weather fix).csv'
+DATA_PATH = '../Data/School_Attendance.csv'
+
 
 # =============================================================================
 # CONSTANTS
@@ -41,7 +43,11 @@ def loadData(data_path):
     TEMP: pandas load csv
     FUTURE: streamlit pass thru
     '''
-    df = pd.read_csv(DATA_PATH)
+    try:
+        df = pd.read_csv(DATA_PATH)
+    
+    except UnicodeDecodeError:
+        df = pd.read_csv(DATA_PATH, encoding='ANSI')
     
     return df
 
@@ -102,7 +108,7 @@ def getClassNames(df, response, MAX_CLASSES):
         if len(class_names) > MAX_CLASSES:
             print(f'\nResponse variable contains over {MAX_CLASSES} classes.',
                   f'\nPlease limit you response variable to {MAX_CLASSES}',
-                   'or less.')
+                   'or less.\nAre you sure this is not a regression problem?')
             
             sys.exit()
             
