@@ -11,15 +11,18 @@ import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor,\
                          plot_tree
                          
+# =============================================================================
+# DEMO DATA
+# =============================================================================
+#DATA_PATH = '../Data/Telco data TC fix_resp_int.csv'
+#DATA_PATH = '../Data/Telco data TC fix.csv'
+DATA_PATH = '../Data/Bike share data (atemp-weather fix).csv'
 
 # =============================================================================
 # CONSTANTS
 # =============================================================================
-PROB = 'classification'
-#PROB = 'regression'
-#DATA_PATH = '../Data/Telco data TC fix_resp_int.csv'
-DATA_PATH = '../Data/Telco data TC fix.csv'
-#DATA_PATH = '../Data/Bike share data (atemp-weather fix).csv'
+#PROB = 'classification'
+PROB = 'regression'
 TREE_DEPTH = 3
 NUMERICS = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
 UNIQUE_THRESH = 0.2
@@ -27,9 +30,6 @@ MAKE_NUM_THRESH = 0.95
 MAX_CLASSES = 10
 CAT_LIMIT = 10
 COL_LIMIT = 100
-
-#class_names = None
-
 
 #assert MAX_CLASSES <= CAT_LIMIT
 
@@ -282,31 +282,32 @@ if __name__ =='__main__':
     
     #get class names if classification
     class_names = getClassNames(df, response, MAX_CLASSES)
-     
+    
+    #determine categorical and numerical columns
     dtype_dict = catOrNum(df, NUMERICS)
     print('\n', dtype_dict, '\n')
     
+    #make column numeric if most values are
     df, dtype_dict = makeNumeric(df, dtype_dict, MAKE_NUM_THRESH)
     
+    #if too many values in reg response are categorical then terminate and warn
     checkRegResponse(df, response, dtype_dict, PROB)
     
+    #drop categorical columns if there are too many unique values
     df, dtype_dict = dropUniques(df, dtype_dict, UNIQUE_THRESH)
     
+    #limit number of categories in cat columns
     df = limitCats(df, dtype_dict, CAT_LIMIT)
     
+    #if classification then ordinal encode the response (for sklearn)
     df, dtype_dict = ordinalResponse(df, class_names, dtype_dict, PROB)
     
+    #one hot encode the categorical columns
     df = dummyVars(df, dtype_dict)
-# =============================================================================
-#bike
-#     df = df.drop(['casual',
-#  'registered',
-#  'count cox',
-#  'casual cox',
-#  'registered cox'], axis=1)
-# =============================================================================
     
+    #train a tree
     dtree = trainTree(df, PROB, response)
-    genTree(dtree, class_names)
     
+    #generate the tree graphic
+    genTree(dtree, class_names)
     
