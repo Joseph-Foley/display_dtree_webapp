@@ -182,8 +182,9 @@ def dropUniques(df, dtype_dict, UNIQUE_THRESH):
     drop categorical columns that have too many unique values.
     UNIQUE_THRESH: % of col that must not be unique
     '''
+    cat_cols = dtype_dict['cat'].copy()
     dropped = []
-    for col in dtype_dict['cat']:       
+    for col in cat_cols:       
         if df[col].nunique()/len(df) > UNIQUE_THRESH:
             df = df.drop(col, axis=1)
             dropped.append(col)
@@ -193,7 +194,7 @@ def dropUniques(df, dtype_dict, UNIQUE_THRESH):
     if len(dropped) > 0:
         print('The following columns have been dropped as they contained too',
               f'many unique categories: \n{dropped}',
-              '\nWas this column meant to be categorical?\n')
+              '\nWas they meant to be categorical?\n')
     
     
     return df, dtype_dict
@@ -286,6 +287,9 @@ def genTree(dtree, class_names):
     plot_tree(dtree, feature_names=df.drop(response, axis=1).columns,\
               class_names=class_names, filled=True, rounded=True, precision=2,\
               proportion=True, impurity=False)
+        
+    print('\nTree nodes looking at bit small?',\
+          '\nTry renaming you columns with less characters\n')
         
 # =============================================================================
 # EXECUTE
