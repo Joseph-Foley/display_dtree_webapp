@@ -79,6 +79,9 @@ def pickResponse(cols):
     return response
 
 def makeRespStr(df, response, PROB):
+    '''
+    classification response must be string type
+    '''
     if PROB == 'classification':
         df[response] = df[response].astype(str)
         
@@ -86,16 +89,6 @@ def makeRespStr(df, response, PROB):
         pass
     
     return df
-    
-def catOrNum(df, NUMERICS):
-    '''
-    Determine which columns are categorical and which are not
-    '''
-    dtype_dict = {}
-    dtype_dict['num'] = list(df.select_dtypes(include=NUMERICS).columns)
-    dtype_dict['cat'] = list(df.select_dtypes(exclude=NUMERICS).columns)
-    
-    return dtype_dict
 
 def getClassNames(df, response, MAX_CLASSES):
     '''
@@ -116,6 +109,30 @@ def getClassNames(df, response, MAX_CLASSES):
         class_names.sort()
     
     return class_names
+    
+def catOrNum(df, NUMERICS):
+    '''
+    Determine which columns are categorical and which are not
+    '''
+    dtype_dict = {}
+    dtype_dict['num'] = list(df.select_dtypes(include=NUMERICS).columns)
+    dtype_dict['cat'] = list(df.select_dtypes(exclude=NUMERICS).columns)
+    
+    return dtype_dict
+
+def processNulls(df, dtype_dict):
+    '''
+    substitue values for null cells
+    '''
+    #median for numerical
+    for col in dtype_dict['num']:
+        df[col] = df[col].fillna(round(df[response].median(),0))
+        
+    #'NULL' for cat
+    for col in dtype_dict['cat']:
+        df[col] = df[col].fillna('NULL')
+        
+    return df
 
 def makeNumeric(df, dtype_dict, MAKE_NUM_THRESH):
     '''
@@ -286,6 +303,9 @@ if __name__ =='__main__':
     #determine categorical and numerical columns
     dtype_dict = catOrNum(df, NUMERICS)
     print('\n', dtype_dict, '\n')
+    
+    #process null values
+    df = processNulls(df, dtype_dict)
     
     #make column numeric if most values are
     df, dtype_dict = makeNumeric(df, dtype_dict, MAKE_NUM_THRESH)
