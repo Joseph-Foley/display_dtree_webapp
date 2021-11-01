@@ -20,6 +20,7 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor,\
 #DATA_PATH = '../Data/School_Attendance.csv'
 #DATA_PATH = '../Data/T20 International Dataset_SMALL.csv'
 DATA_PATH = '../Data/titanic_data.csv'
+#DATA_PATH = '../Data/us2021census.csv''
 
 # =============================================================================
 # CONSTANTS
