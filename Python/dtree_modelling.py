@@ -135,7 +135,7 @@ def catOrNum(df, NUMERICS):
     
     return dtype_dict
 
-def processNulls(df, dtype_dict):
+def processNulls(df, dtype_dict, response):
     '''
     substitue values for null cells
     '''
@@ -291,7 +291,7 @@ def trainTree(df, PROB, response):
     
     return dtree
 
-def genTree(dtree, class_names):
+def genTree(dtree, class_names, response):
     '''
     generates (& displays) a drawn dtree
     '''
@@ -321,14 +321,14 @@ if __name__ =='__main__':
     df = makeRespStr(df, response, PROB)
     
     #get class names if classification
-    class_names = getClassNames(df, response, MAX_CLASSES)
+    class_names = getClassNames(df, response, MAX_CLASSES, PROB)
     
     #determine categorical and numerical columns
     dtype_dict = catOrNum(df, NUMERICS)
     print('\n', dtype_dict, '\n')
     
     #process null values
-    df = processNulls(df, dtype_dict)
+    df = processNulls(df, dtype_dict, response)
     
     #make column numeric if most values are
     df, dtype_dict = makeNumeric(df, dtype_dict, MAKE_NUM_THRESH)
@@ -352,5 +352,5 @@ if __name__ =='__main__':
     dtree = trainTree(df, PROB, response)
     
     #generate the tree graphic
-    genTree(dtree, class_names)
+    genTree(dtree, class_names, response)
     
