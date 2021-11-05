@@ -291,7 +291,7 @@ def trainTree(df, PROB, response):
     
     return dtree
 
-def genTree(dtree, class_names, response):
+def genTree(df, dtree, class_names, response):
     '''
     generates (& displays) a drawn dtree
     '''
@@ -352,5 +352,5 @@ if __name__ =='__main__':
     dtree = trainTree(df, PROB, response)
     
     #generate the tree graphic
-    genTree(dtree, class_names, response)
+    genTree(df, dtree, class_names, response)
     
