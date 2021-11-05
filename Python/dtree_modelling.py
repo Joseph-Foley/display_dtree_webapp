@@ -40,7 +40,7 @@ COL_LIMIT = 100
 # =============================================================================
 # FUNCTIONS
 # =============================================================================
-def loadData(data_path):
+def loadData(DATA_PATH):
     '''
     TEMP: pandas load csv
     FUTURE: streamlit pass thru
