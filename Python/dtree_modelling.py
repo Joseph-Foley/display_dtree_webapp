@@ -105,7 +105,7 @@ def makeRespStr(df, response, PROB):
     
     return df
 
-def getClassNames(df, response, MAX_CLASSES):
+def getClassNames(df, response, MAX_CLASSES, PROB):
     '''
     Get the class names of a classification problem
     '''
