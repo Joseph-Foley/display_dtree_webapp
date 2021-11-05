@@ -17,9 +17,9 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor,\
 #DATA_PATH = '../Data/Telco data TC fix_resp_int.csv'
 #DATA_PATH = '../Data/Telco data TC fix.csv'
 #DATA_PATH = '../Data/Bike share data (atemp-weather fix).csv'
-#DATA_PATH = '../Data/School_Attendance.csv'
+DATA_PATH = '../Data/School_Attendance.csv'
 #DATA_PATH = '../Data/T20 International Dataset_SMALL.csv'
-DATA_PATH = '../Data/titanic_data.csv'
+#DATA_PATH = '../Data/titanic_data.csv'
 #DATA_PATH = '../Data/us2021census.csv''
 
 # =============================================================================
@@ -49,6 +49,13 @@ def loadData(DATA_PATH):
         df = pd.read_csv(DATA_PATH)
     
     except UnicodeDecodeError:
+        
+        try:
+            #reset buffer for streamlit
+            DATA_PATH.seek(0)
+        except:
+            print('\nnot running in streamlit\n')
+            
         df = pd.read_csv(DATA_PATH, encoding='ANSI')
     
     return df
