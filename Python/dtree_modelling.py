@@ -231,7 +231,7 @@ def limitCats(df, dtype_dict, CAT_LIMIT):
             
     return df
 
-def ordinalResponse(df, class_names, dtype_dict, PROB):
+def ordinalResponse(df, response, class_names, dtype_dict, PROB):
     '''
     response var in categorical problems needs to be in ordinal format
     e.g. red, green, blue => 0, 1, 2
@@ -343,7 +343,7 @@ if __name__ =='__main__':
     df = limitCats(df, dtype_dict, CAT_LIMIT)
     
     #if classification then ordinal encode the response (for sklearn)
-    df, dtype_dict = ordinalResponse(df, class_names, dtype_dict, PROB)
+    df, dtype_dict = ordinalResponse(df, response, class_names, dtype_dict, PROB)
     
     #one hot encode the categorical columns
     df = dummyVars(df, dtype_dict)

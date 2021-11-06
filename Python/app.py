@@ -104,7 +104,7 @@ def main():
                 print('\n', dtype_dict, '\n')
                 
                 #process null values
-                df = dtm.processNulls(df, dtype_dict, response)
+                df = dtm.processNulls(df, dtype_dict)
                 
                 #make column numeric if most values are
                 df, dtype_dict = dtm.makeNumeric(df, dtype_dict, MAKE_NUM_THRESH)
@@ -119,7 +119,7 @@ def main():
                 df = dtm.limitCats(df, dtype_dict, CAT_LIMIT)
                 
                 #if classification then ordinal encode the response (for sklearn)
-                df, dtype_dict = dtm.ordinalResponse(df, class_names, dtype_dict, tree_type)
+                df, dtype_dict = dtm.ordinalResponse(df, response, class_names, dtype_dict, tree_type)
                 
                 #one hot encode the categorical columns
                 df = dtm.dummyVars(df, dtype_dict)
