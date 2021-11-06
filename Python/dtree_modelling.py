@@ -294,7 +294,8 @@ def trainTree(df, PROB, response):
     
     return dtree
 
-def genTree(df, dtree, class_names, response, w=15, h=10, dpi=200):
+def genTree(df, dtree, class_names, response,\
+            w=14, h=6, dpi=300, fontsize=8):
     '''
     generates (& displays) a drawn dtree
     '''
@@ -302,7 +303,7 @@ def genTree(df, dtree, class_names, response, w=15, h=10, dpi=200):
     fig, axes = plt.subplots(nrows = 1,ncols = 1,figsize = (w, h), dpi=dpi)
     plot_tree(dtree, feature_names=df.drop(response, axis=1).columns,\
               class_names=class_names, filled=True, rounded=True, precision=2,\
-              proportion=True, impurity=False)
+              proportion=True, impurity=False, fontsize=fontsize)
     
     #save as image to memory
     mem_fig = BytesIO()
@@ -361,7 +362,8 @@ if __name__ =='__main__':
     dtree = trainTree(df, PROB, response)
     
     #generate the tree graphic to BytesIO
-    mem_fig = genTree(df, dtree, class_names, response, w=15, h=10, dpi=200)
+    mem_fig = genTree(df, dtree, class_names, response,\
+                      w=14, h=6, dpi=125, fontsize=8)
     
     #render in console
     mem_fig.seek(0)
