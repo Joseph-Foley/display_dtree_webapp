@@ -17,6 +17,8 @@ import dtree_modelling as dtm
 #TEMP
 from sklearn.tree import plot_tree
 import matplotlib.pyplot as plt
+from io import BytesIO
+from PIL import Image
 
 # =============================================================================
 # CONSTANTS
@@ -130,16 +132,13 @@ def main():
                 
                 #train a tree
                 dtree = dtm.trainTree(df, tree_type, response)
+
+                #generate the tree graphic to BytesIO
+                mem_fig = dtm.genTree(df, dtree, class_names, response)
                 
-                #generate the tree graphic
-                #st.pyplot(dtm.genTree(df, dtree, class_names, response))
-                fig, axes = plt.subplots(nrows = 1,ncols = 1,figsize = (10, 10), dpi=100)
+                #display as image on app
+                st.image(mem_fig)
                 
-                plot_tree(dtree, feature_names=df.drop(response, axis=1).columns,\
-                class_names=class_names, filled=True, rounded=True, precision=2,\
-                proportion=True, impurity=False)
-                
-                st.pyplot(fig)
 
 # =============================================================================
 # EXECUTE

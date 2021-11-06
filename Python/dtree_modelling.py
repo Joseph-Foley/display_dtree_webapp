@@ -11,6 +11,9 @@ import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor,\
                          plot_tree
                          
+from io import BytesIO
+from PIL import Image
+                         
 # =============================================================================
 # DEMO DATA
 # =============================================================================
@@ -300,9 +303,15 @@ def genTree(df, dtree, class_names, response):
     plot_tree(dtree, feature_names=df.drop(response, axis=1).columns,\
               class_names=class_names, filled=True, rounded=True, precision=2,\
               proportion=True, impurity=False)
-        
+    
+    #save as image to memory
+    mem_fig = BytesIO()
+    fig.savefig(mem_fig)
+    
     print('\nTree nodes looking at bit small?',\
           '\nTry renaming you columns with less characters\n')
+        
+    return mem_fig
         
 # =============================================================================
 # EXECUTE
@@ -351,23 +360,10 @@ if __name__ =='__main__':
     #train a tree
     dtree = trainTree(df, PROB, response)
     
-    #generate the tree graphic
-    #genTree(df, dtree, class_names, response)
+    #generate the tree graphic to BytesIO
+    mem_fig = genTree(df, dtree, class_names, response)
     
-    fig, axes = plt.subplots(nrows = 1,ncols = 1,figsize = (10, 10), dpi=100)
-    plot_tree(dtree, feature_names=df.drop(response, axis=1).columns,\
-              class_names=class_names, filled=True, rounded=True, precision=2,\
-              proportion=True, impurity=False)
-        
-    from io import BytesIO
-    mem_fig = BytesIO()
-    
-    #fig.savefig('test.png')
-    fig.savefig(mem_fig)
-    
-    from PIL import Image
-    
+    #render in console
     mem_fig.seek(0)
-    im = Image.open(mem_fig)
-    im.show()
-    mem_fig.close()
+    image_plot = Image.open(mem_fig)
+    
