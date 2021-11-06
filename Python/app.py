@@ -134,7 +134,8 @@ def main():
                 dtree = dtm.trainTree(df, tree_type, response)
 
                 #generate the tree graphic to BytesIO
-                mem_fig = dtm.genTree(df, dtree, class_names, response)
+                mem_fig = dtm.genTree(df, dtree, class_names, response,\
+                                      w=10, h=10, dpi=100)
                 
                 #display as image on app
                 st.image(mem_fig)

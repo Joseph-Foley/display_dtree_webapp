@@ -294,12 +294,12 @@ def trainTree(df, PROB, response):
     
     return dtree
 
-def genTree(df, dtree, class_names, response):
+def genTree(df, dtree, class_names, response, w=15, h=10, dpi=200):
     '''
     generates (& displays) a drawn dtree
     '''
     #TODO test figsize on variety of screens
-    fig, axes = plt.subplots(nrows = 1,ncols = 1,figsize = (10, 10), dpi=100)
+    fig, axes = plt.subplots(nrows = 1,ncols = 1,figsize = (w, h), dpi=dpi)
     plot_tree(dtree, feature_names=df.drop(response, axis=1).columns,\
               class_names=class_names, filled=True, rounded=True, precision=2,\
               proportion=True, impurity=False)
@@ -361,7 +361,7 @@ if __name__ =='__main__':
     dtree = trainTree(df, PROB, response)
     
     #generate the tree graphic to BytesIO
-    mem_fig = genTree(df, dtree, class_names, response)
+    mem_fig = genTree(df, dtree, class_names, response, w=15, h=10, dpi=200)
     
     #render in console
     mem_fig.seek(0)
