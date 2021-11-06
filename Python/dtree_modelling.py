@@ -15,9 +15,9 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor,\
 # DEMO DATA
 # =============================================================================
 #DATA_PATH = '../Data/Telco data TC fix_resp_int.csv'
-#DATA_PATH = '../Data/Telco data TC fix.csv'
+DATA_PATH = '../Data/Telco data TC fix.csv'
 #DATA_PATH = '../Data/Bike share data (atemp-weather fix).csv'
-DATA_PATH = '../Data/School_Attendance.csv'
+#DATA_PATH = '../Data/School_Attendance.csv'
 #DATA_PATH = '../Data/T20 International Dataset_SMALL.csv'
 #DATA_PATH = '../Data/titanic_data.csv'
 #DATA_PATH = '../Data/us2021census.csv''
@@ -135,13 +135,13 @@ def catOrNum(df, NUMERICS):
     
     return dtype_dict
 
-def processNulls(df, dtype_dict, response):
+def processNulls(df, dtype_dict):
     '''
     substitue values for null cells
     '''
     #median for numerical
     for col in dtype_dict['num']:
-        df[col] = df[col].fillna(round(df[response].median(),0))
+        df[col] = df[col].fillna(round(df[col].median(),0))
         
     #'NULL' for cat
     for col in dtype_dict['cat']:
@@ -328,7 +328,7 @@ if __name__ =='__main__':
     print('\n', dtype_dict, '\n')
     
     #process null values
-    df = processNulls(df, dtype_dict, response)
+    df = processNulls(df, dtype_dict)
     
     #make column numeric if most values are
     df, dtype_dict = makeNumeric(df, dtype_dict, MAKE_NUM_THRESH)

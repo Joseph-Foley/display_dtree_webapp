@@ -33,7 +33,7 @@ SCREEN_WIDTH_PERC = 60
 # =============================================================================
 def _max_width_(SCREEN_WIDTH_PERC):
     '''
-    Sets pixel width of the app
+    Sets pixel width of the streamlit app
     https://discuss.streamlit.io/t/custom-render-widths/81/7
     '''
     max_width_str = f"max-width: {SCREEN_WIDTH_PERC}%;"
@@ -48,7 +48,7 @@ def main():
     '''
     The Streamlit app
     '''
-    _max_width_(prcnt_width=60)
+    _max_width_(SCREEN_WIDTH_PERC)
     #st.set_page_config(layout="wide")
     st.write('Create a Decision Tree!')
     
