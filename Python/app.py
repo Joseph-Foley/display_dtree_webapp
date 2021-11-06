@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Front end streamlit app
+Front end streamlit app.
+Upload data.
+Pick response.
+Pick tree type.
+Create Tree.
 """
 # =============================================================================
 # IMPORTS
