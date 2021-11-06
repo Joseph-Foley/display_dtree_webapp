@@ -24,16 +24,32 @@ MAKE_NUM_THRESH = 0.95
 MAX_CLASSES = 10
 CAT_LIMIT = 10
 COL_LIMIT = 100
+SCREEN_WIDTH_PERC = 60
 
 #assert MAX_CLASSES <= CAT_LIMIT
 
 # =============================================================================
 # FUNCTIONS
 # =============================================================================
+def _max_width_(SCREEN_WIDTH_PERC):
+    '''
+    Sets pixel width of the app
+    https://discuss.streamlit.io/t/custom-render-widths/81/7
+    '''
+    max_width_str = f"max-width: {SCREEN_WIDTH_PERC}%;"
+    st.markdown(f""" 
+                <style> 
+                .reportview-container .main .block-container{{{max_width_str}}}
+                </style>    
+                """, 
+                unsafe_allow_html=True)
+    
 def main():
     '''
     The Streamlit app
     '''
+    _max_width_(prcnt_width=60)
+    #st.set_page_config(layout="wide")
     st.write('Create a Decision Tree!')
     
     uploaded_file = st.file_uploader(label='Upload csv file',\
@@ -113,7 +129,7 @@ def main():
                 
                 #generate the tree graphic
                 #st.pyplot(dtm.genTree(df, dtree, class_names, response))
-                fig, axes = plt.subplots(nrows = 1,ncols = 1,figsize = (20,12))
+                fig, axes = plt.subplots(nrows = 1,ncols = 1,figsize = (10, 10), dpi=100)
                 
                 plot_tree(dtree, feature_names=df.drop(response, axis=1).columns,\
                 class_names=class_names, filled=True, rounded=True, precision=2,\
