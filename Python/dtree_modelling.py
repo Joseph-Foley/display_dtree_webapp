@@ -358,5 +358,16 @@ if __name__ =='__main__':
     plot_tree(dtree, feature_names=df.drop(response, axis=1).columns,\
               class_names=class_names, filled=True, rounded=True, precision=2,\
               proportion=True, impurity=False)
-    fig.savefig('test.png')
+        
+    from io import BytesIO
+    mem_fig = BytesIO()
     
+    #fig.savefig('test.png')
+    fig.savefig(mem_fig)
+    
+    from PIL import Image
+    
+    mem_fig.seek(0)
+    im = Image.open(mem_fig)
+    im.show()
+    mem_fig.close()
