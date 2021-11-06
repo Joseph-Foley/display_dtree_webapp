@@ -296,7 +296,7 @@ def genTree(df, dtree, class_names, response):
     generates (& displays) a drawn dtree
     '''
     #TODO test figsize on variety of screens
-    plt.figure(figsize=(20, 12)) 
+    fig, axes = plt.subplots(nrows = 1,ncols = 1,figsize = (10, 10), dpi=100)
     plot_tree(dtree, feature_names=df.drop(response, axis=1).columns,\
               class_names=class_names, filled=True, rounded=True, precision=2,\
               proportion=True, impurity=False)
@@ -352,5 +352,11 @@ if __name__ =='__main__':
     dtree = trainTree(df, PROB, response)
     
     #generate the tree graphic
-    genTree(df, dtree, class_names, response)
+    #genTree(df, dtree, class_names, response)
+    
+    fig, axes = plt.subplots(nrows = 1,ncols = 1,figsize = (10, 10), dpi=100)
+    plot_tree(dtree, feature_names=df.drop(response, axis=1).columns,\
+              class_names=class_names, filled=True, rounded=True, precision=2,\
+              proportion=True, impurity=False)
+    fig.savefig('test.png')
     
