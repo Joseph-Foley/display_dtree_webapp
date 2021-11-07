@@ -190,9 +190,9 @@ def checkRegResponse(df, response, dtype_dict, PROB):
     and response in dtype_dict['cat']:
         
         note = '\nResponse variable has too many non numerical values,\n'+\
-              'Are you sure this is a regression problem,\n'+\
-              'If so then edit the response column so that it only contains '+\
-              'numerical values\n'
+               'Are you sure this is a regression problem? \n'+\
+               'If so then edit the response column so that it only contains '+\
+               'numerical values\n'
         
         print(note)
         
@@ -218,7 +218,7 @@ def dropUniques(df, dtype_dict, UNIQUE_THRESH):
               '\nWere they meant to be categorical?\n')
     
     
-    return df, dtype_dict
+    return df, dtype_dict, dropped
 
 def limitCats(df, dtype_dict, CAT_LIMIT):
     '''
@@ -357,7 +357,7 @@ if __name__ =='__main__':
         sys.exit()
     
     #drop categorical columns if there are too many unique values
-    df, dtype_dict = dropUniques(df, dtype_dict, UNIQUE_THRESH)
+    df, dtype_dict, dropped = dropUniques(df, dtype_dict, UNIQUE_THRESH)
     
     #limit number of categories in cat columns
     df = limitCats(df, dtype_dict, CAT_LIMIT)

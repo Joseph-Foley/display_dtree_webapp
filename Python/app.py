@@ -135,7 +135,11 @@ def main():
                         
                     else:
                         #drop categorical columns if there are too many unique values
-                        df, dtype_dict = dtm.dropUniques(df, dtype_dict, UNIQUE_THRESH)
+                        df, dtype_dict, dropped = dtm.dropUniques(df, dtype_dict, UNIQUE_THRESH)
+                        if dropped != []:
+                            st.warning('The following columns have been dropped as they contained too'+\
+                                       f' many unique categories: \n{dropped}'+\
+                                       '\nWere they meant to be categorical?\n')
                         
                         #limit number of categories in cat columns
                         df = dtm.limitCats(df, dtype_dict, CAT_LIMIT)
