@@ -11,6 +11,7 @@ Create Tree.
 # =============================================================================
 import pandas as pd
 import streamlit as st
+from PIL import Image
 
 import dtree_modelling as dtm
 
@@ -18,7 +19,8 @@ import dtree_modelling as dtm
 from sklearn.tree import plot_tree
 import matplotlib.pyplot as plt
 from io import BytesIO
-from PIL import Image
+
+import os
 
 # =============================================================================
 # CONSTANTS
@@ -70,6 +72,15 @@ def main():
                                          type=['csv'],\
                                          help='Upload a csv file that is tabular data, 5MB limit',\
                                          )
+        
+        #side bar pop up tutorial
+        how_work = st.button('How does this work?')
+        if how_work:
+            st.sidebar.write('hello sidebar')
+            st.sidebar.write(os.getcwd())
+            image = Image.open(r'../Images/iris_tree.png')
+            st.sidebar.image(image, use_column_width=True)
+       
     #right side is selection boxes
     with col2:
         if uploaded_file is not None:
