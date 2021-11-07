@@ -60,46 +60,52 @@ def main():
     #placeholder variables
     response = 'SELECT A COLUMN'
     
-    #File upload
-    uploaded_file = st.file_uploader(label='Upload csv file',\
-                                     type=['csv'],\
-                                     help='Upload a csv file that is tabular data, 5MB limit',\
-                                     )
-        
-    if uploaded_file is not None:
-        #load data as pandas df
-        df = dtm.loadData(uploaded_file)
-        
-        #get column headings
-        cols = dtm.getColumns(df)
-        
-        #check column limit
-        note = dtm.checkColLimit(cols, COL_LIMIT)
-        if note is not None:
-            st.error(note)
-                
-        
-        else:
-            #TEMP show df
-            #st.write(df)
+    #divide page veritcally
+    col1, col2 = st.columns(2)
+    
+    #left side is data upload
+    with col1:
+        #File upload
+        uploaded_file = st.file_uploader(label='Upload csv file',\
+                                         type=['csv'],\
+                                         help='Upload a csv file that is tabular data, 5MB limit',\
+                                         )
+    #right side is selection boxes
+    with col2:
+        if uploaded_file is not None:
+            #load data as pandas df
+            df = dtm.loadData(uploaded_file)
             
-            #get user to pick a column as response variable
-            response = st.selectbox(label='Pick your response variable',\
-                                        options=cols + ['SELECT A COLUMN'],\
-                                        index=len(cols))
-            #TEMP    
-            #st.write('Response Variable:', response)
-        
-        #pick problem type
-        if response != 'SELECT A COLUMN':
-            tree_type = st.selectbox(label='Pick Tree type. (Regression or Classification)',\
-                                     options=['Regression', 'Classification', 'PICK TREE TYPE'],\
-                                     index=2)
+            #get column headings
+            cols = dtm.getColumns(df)
+            
+            #check column limit
+            note = dtm.checkColLimit(cols, COL_LIMIT)
+            if note is not None:
+                st.error(note)
+                    
+            
+            else:
+                #TEMP show df
+                #st.write(df)
                 
-            #TEMP
-            #st.write('Tree Type:', tree_type)
-        
-        #reveal "Go" Button
+                #get user to pick a column as response variable
+                response = st.selectbox(label='Pick your response variable',\
+                                            options=cols + ['SELECT A COLUMN'],\
+                                            index=len(cols))
+                #TEMP    
+                #st.write('Response Variable:', response)
+            
+            #pick problem type
+            if response != 'SELECT A COLUMN':
+                tree_type = st.selectbox(label='Pick Tree type. (Regression or Classification)',\
+                                         options=['Regression', 'Classification', 'PICK TREE TYPE'],\
+                                         index=2)
+                    
+                #TEMP
+                #st.write('Tree Type:', tree_type)
+            
+        #reveal "Go" Button (underneath columns
         if response != 'SELECT A COLUMN'\
         and tree_type != 'PICK TREE TYPE':
             go_button = st.button(label='Create Decision Tree')
