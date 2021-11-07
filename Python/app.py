@@ -78,9 +78,9 @@ def main():
         cols = dtm.getColumns(df)
         
         #check column limit
-        if dtm.checkColLimit(cols, COL_LIMIT):
-            st.error('\nCOLUMN LIMIT EXCEEDED'+\
-                     f'\nPLEASE LIMIT YOUR DATA TO {COL_LIMIT} COLUMNS')
+        note = dtm.checkColLimit(cols, COL_LIMIT)
+        if note is not None:
+            st.error(note)
                 
         #get user to pick a column as response variable
         else:

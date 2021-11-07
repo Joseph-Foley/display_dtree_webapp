@@ -77,10 +77,12 @@ def checkColLimit(cols, COL_LIMIT):
     Number of columns must not exceed limit
     '''
     if len(cols) > COL_LIMIT:
-        print('\nCOLUMN LIMIT EXCEEDED',
-              f'\nPLEASE LIMIT YOUR DATA TO {COL_LIMIT} COLUMNS')
+        note = '\nCOLUMN LIMIT EXCEEDED' + \
+               f'\nPLEASE LIMIT YOUR DATA TO {COL_LIMIT} COLUMNS'
         
-        return True
+        print(note)
+        
+        return note
 
 def pickResponse(cols):
     '''
@@ -191,6 +193,8 @@ def checkRegResponse(df, response, dtype_dict, PROB):
               'Are you sure this is a regression problem,\n',
               'If so then edit the response column so that it only contains ',
               'numerical values\n')
+        
+        print(note)
         
         sys.exit()
         
