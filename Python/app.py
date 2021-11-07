@@ -55,7 +55,7 @@ def main():
     The Streamlit app
     '''
     _max_width_(SCREEN_WIDTH_PERC)
-    st.write('Create a Decision Tree!')
+    st.title('Create a Decision Tree!')
     
     #placeholder variables
     response = 'SELECT A COLUMN'
@@ -92,8 +92,8 @@ def main():
         
         #pick problem type
         if response != 'SELECT A COLUMN':
-            tree_type = st.selectbox(label='Pick Tree type. (regression or classification)',\
-                                     options=['regression', 'classification', 'PICK TREE TYPE'],\
+            tree_type = st.selectbox(label='Pick Tree type. (Regression or Classification)',\
+                                     options=['Regression', 'Classification', 'PICK TREE TYPE'],\
                                      index=2)
                 
             #TEMP
@@ -106,10 +106,10 @@ def main():
             
             #Gooo!
             if go_button:
-                #make response col dtype string if classification
+                #make response col dtype string if Classification
                 df = dtm.makeRespStr(df, response, tree_type)
                 
-                #get class names if classification
+                #get class names if Classification
                 class_names = dtm.getClassNames(df, response, MAX_CLASSES, tree_type)
                 
                 #check to see if there weren't too many classes
@@ -143,7 +143,7 @@ def main():
                         #limit number of categories in cat columns
                         df = dtm.limitCats(df, dtype_dict, CAT_LIMIT)
                         
-                        #if classification then ordinal encode the response (for sklearn)
+                        #if Classification then ordinal encode the response (for sklearn)
                         df, dtype_dict = dtm.ordinalResponse(df, response, class_names, dtype_dict, tree_type)
                         
                         #one hot encode the categorical columns

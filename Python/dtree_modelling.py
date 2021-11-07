@@ -28,8 +28,8 @@ DATA_PATH = '../Data/Telco data TC fix.csv'
 # =============================================================================
 # CONSTANTS
 # =============================================================================
-PROB = 'classification'
-#PROB = 'regression'
+PROB = 'Classification'
+#PROB = 'Regression'
 TREE_DEPTH = 3
 NUMERICS = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
 UNIQUE_THRESH = 0.2
@@ -100,9 +100,9 @@ def pickResponse(cols):
 
 def makeRespStr(df, response, PROB):
     '''
-    classification response must be string type
+    Classification response must be string type
     '''
-    if PROB == 'classification':
+    if PROB == 'Classification':
         df[response] = df[response].astype(str)
         
     else:
@@ -112,9 +112,9 @@ def makeRespStr(df, response, PROB):
 
 def getClassNames(df, response, MAX_CLASSES, PROB):
     '''
-    Get the class names of a classification problem
+    Get the class names of a Classification problem
     '''
-    if PROB == 'regression':
+    if PROB == 'Regression':
         class_names = None
     else:
         class_names = list(df[response].unique())
@@ -122,7 +122,7 @@ def getClassNames(df, response, MAX_CLASSES, PROB):
         if len(class_names) > MAX_CLASSES:
             note = f'\nResponse variable contains over {MAX_CLASSES} classes'+\
                    f'\nPlease limit you response variable to {MAX_CLASSES} '+\
-                   'or less.\nAre you sure this is not a regression problem?'
+                   'or less.\nAre you sure this is not a Regression problem?'
             
             print(note)
             
@@ -183,14 +183,14 @@ def makeNumeric(df, dtype_dict, MAKE_NUM_THRESH):
             
 def checkRegResponse(df, response, dtype_dict, PROB):
     '''
-    if there still too many non numerical columns in regression response then
+    if there still too many non numerical columns in Regression response then
     terminate.
     '''
-    if PROB == 'regression'\
+    if PROB == 'Regression'\
     and response in dtype_dict['cat']:
         
         note = '\nResponse variable has too many non numerical values,\n'+\
-               'Are you sure this is a regression problem? \n'+\
+               'Are you sure this is a Regression problem? \n'+\
                'If so then edit the response column so that it only contains '+\
                'numerical values\n'
         
@@ -245,10 +245,10 @@ def ordinalResponse(df, response, class_names, dtype_dict, PROB):
     response var in categorical problems needs to be in ordinal format
     e.g. red, green, blue => 0, 1, 2
     '''
-    if PROB == 'regression':
+    if PROB == 'Regression':
         pass
     
-    elif PROB == 'classification':
+    elif PROB == 'Classification':
         #make map
         ord_map = pd.Series(index=class_names,\
                             data=range(len(class_names)))
@@ -261,7 +261,7 @@ def ordinalResponse(df, response, class_names, dtype_dict, PROB):
         dtype_dict['num'].append(response)
         
     else:
-        print('\n\n\n!!! PROB must be regression or classification !!!\n\n\n') 
+        print('\n\n\n!!! PROB must be Regression or Classification !!!\n\n\n') 
         
         
     return df, dtype_dict
@@ -285,15 +285,15 @@ def trainTree(df, PROB, response):
     '''
     train a dtree model
     '''
-    #regression or classification
-    if PROB == 'regression':
+    #Regression or Classification
+    if PROB == 'Regression':
         dtree = DecisionTreeRegressor(max_depth=TREE_DEPTH)
         
-    elif PROB == 'classification':
+    elif PROB == 'Classification':
         dtree = DecisionTreeClassifier(max_depth=TREE_DEPTH)
         
     else:
-        print('\n\n\n!!! PROB must be regression or classification !!!\n\n\n')
+        print('\n\n\n!!! PROB must be Regression or Classification !!!\n\n\n')
         
     #train
     dtree.fit(df.drop(response, axis=1), df[response])
@@ -333,10 +333,10 @@ if __name__ =='__main__':
     #user picks response column
     response = pickResponse(cols)
     
-    #make response col dtype string if classification
+    #make response col dtype string if Classification
     df = makeRespStr(df, response, PROB)
     
-    #get class names if classification
+    #get class names if Classification
     class_names = getClassNames(df, response, MAX_CLASSES, PROB)
     if type(class_names) is str:
         sys.exit()
@@ -362,7 +362,7 @@ if __name__ =='__main__':
     #limit number of categories in cat columns
     df = limitCats(df, dtype_dict, CAT_LIMIT)
     
-    #if classification then ordinal encode the response (for sklearn)
+    #if Classification then ordinal encode the response (for sklearn)
     df, dtype_dict = ordinalResponse(df, response, class_names, dtype_dict, PROB)
     
     #one hot encode the categorical columns
