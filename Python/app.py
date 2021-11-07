@@ -96,9 +96,6 @@ def main():
             
             #Gooo!
             if go_button:
-                st.write('gooo!\n\n\n')
-                
-                
                 #make response col dtype string if classification
                 df = dtm.makeRespStr(df, response, tree_type)
                 
