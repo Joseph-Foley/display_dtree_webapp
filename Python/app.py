@@ -55,7 +55,6 @@ def main():
     The Streamlit app
     '''
     _max_width_(SCREEN_WIDTH_PERC)
-    #st.set_page_config(layout="wide")
     st.write('Create a Decision Tree!')
     
     #placeholder variables
@@ -82,14 +81,14 @@ def main():
         
         else:
             #TEMP show df
-            st.write(df)
+            #st.write(df)
             
             #get user to pick a column as response variable
             response = st.selectbox(label='Pick your response variable',\
                                         options=cols + ['SELECT A COLUMN'],\
                                         index=len(cols))
             #TEMP    
-            st.write('Response Variable:', response)
+            #st.write('Response Variable:', response)
         
         #pick problem type
         if response != 'SELECT A COLUMN':
@@ -98,7 +97,7 @@ def main():
                                      index=2)
                 
             #TEMP
-            st.write('Tree Type:', tree_type)
+            #st.write('Tree Type:', tree_type)
         
         #reveal "Go" Button
         if response != 'SELECT A COLUMN'\
