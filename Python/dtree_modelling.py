@@ -84,8 +84,7 @@ def checkColLimit(cols, COL_LIMIT):
 
 def pickResponse(cols):
     '''
-    TEMP: input
-    FUTURE: streamlit drop down
+    Back end only. Simulates user input of response variable.
     '''
     selection = pd.Series(cols)
     print(selection)
@@ -119,11 +118,13 @@ def getClassNames(df, response, MAX_CLASSES, PROB):
         class_names = list(df[response].unique())
         
         if len(class_names) > MAX_CLASSES:
-            print(f'\nResponse variable contains over {MAX_CLASSES} classes.',
-                  f'\nPlease limit you response variable to {MAX_CLASSES}',
-                   'or less.\nAre you sure this is not a regression problem?')
+            note = f'\nResponse variable contains over {MAX_CLASSES} classes'+\
+                   f'\nPlease limit you response variable to {MAX_CLASSES} '+\
+                   'or less.\nAre you sure this is not a regression problem?'
             
-            sys.exit()
+            print(note)
+            
+            return note
             
         class_names.sort()
     

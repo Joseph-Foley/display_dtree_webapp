@@ -112,40 +112,45 @@ def main():
                 #get class names if classification
                 class_names = dtm.getClassNames(df, response, MAX_CLASSES, tree_type)
                 
-                #determine categorical and numerical columns
-                dtype_dict = dtm.catOrNum(df, NUMERICS)
-                print('\n', dtype_dict, '\n')
-                
-                #process null values
-                df = dtm.processNulls(df, dtype_dict)
-                
-                #make column numeric if most values are
-                df, dtype_dict = dtm.makeNumeric(df, dtype_dict, MAKE_NUM_THRESH)
-                
-                #if too many values in reg response are categorical then terminate and warn
-                dtm.checkRegResponse(df, response, dtype_dict, tree_type)
-                
-                #drop categorical columns if there are too many unique values
-                df, dtype_dict = dtm.dropUniques(df, dtype_dict, UNIQUE_THRESH)
-                
-                #limit number of categories in cat columns
-                df = dtm.limitCats(df, dtype_dict, CAT_LIMIT)
-                
-                #if classification then ordinal encode the response (for sklearn)
-                df, dtype_dict = dtm.ordinalResponse(df, response, class_names, dtype_dict, tree_type)
-                
-                #one hot encode the categorical columns
-                df = dtm.dummyVars(df, dtype_dict)
-                
-                #train a tree
-                dtree = dtm.trainTree(df, tree_type, response)
-
-                #generate the tree graphic to BytesIO
-                mem_fig = dtm.genTree(df, dtree, class_names, response,\
-                                      w=14, h=6, dpi=300, fontsize=8)
-                
-                #display as image on app
-                st.image(mem_fig)
+                #check to see if there weren't too many classes
+                if type(class_names) is str:
+                    st.error(class_names)
+                          
+                else:
+                    #determine categorical and numerical columns
+                    dtype_dict = dtm.catOrNum(df, NUMERICS)
+                    print('\n', dtype_dict, '\n')
+                    
+                    #process null values
+                    df = dtm.processNulls(df, dtype_dict)
+                    
+                    #make column numeric if most values are
+                    df, dtype_dict = dtm.makeNumeric(df, dtype_dict, MAKE_NUM_THRESH)
+                    
+                    #if too many values in reg response are categorical then terminate and warn
+                    dtm.checkRegResponse(df, response, dtype_dict, tree_type)
+                    
+                    #drop categorical columns if there are too many unique values
+                    df, dtype_dict = dtm.dropUniques(df, dtype_dict, UNIQUE_THRESH)
+                    
+                    #limit number of categories in cat columns
+                    df = dtm.limitCats(df, dtype_dict, CAT_LIMIT)
+                    
+                    #if classification then ordinal encode the response (for sklearn)
+                    df, dtype_dict = dtm.ordinalResponse(df, response, class_names, dtype_dict, tree_type)
+                    
+                    #one hot encode the categorical columns
+                    df = dtm.dummyVars(df, dtype_dict)
+                    
+                    #train a tree
+                    dtree = dtm.trainTree(df, tree_type, response)
+    
+                    #generate the tree graphic to BytesIO
+                    mem_fig = dtm.genTree(df, dtree, class_names, response,\
+                                          w=14, h=6, dpi=300, fontsize=8)
+                    
+                    #display as image on app
+                    st.image(mem_fig)
                 
 
 # =============================================================================
