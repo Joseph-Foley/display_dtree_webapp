@@ -189,14 +189,14 @@ def checkRegResponse(df, response, dtype_dict, PROB):
     if PROB == 'regression'\
     and response in dtype_dict['cat']:
         
-        print('\nResponse variable has too many non numerical values,\n',
-              'Are you sure this is a regression problem,\n',
-              'If so then edit the response column so that it only contains ',
-              'numerical values\n')
+        note = '\nResponse variable has too many non numerical values,\n'+\
+              'Are you sure this is a regression problem,\n'+\
+              'If so then edit the response column so that it only contains '+\
+              'numerical values\n'
         
         print(note)
         
-        sys.exit()
+        return note
         
 def dropUniques(df, dtype_dict, UNIQUE_THRESH):
     '''
@@ -338,6 +338,8 @@ if __name__ =='__main__':
     
     #get class names if classification
     class_names = getClassNames(df, response, MAX_CLASSES, PROB)
+    if type(class_names) is str:
+        sys.exit()
     
     #determine categorical and numerical columns
     dtype_dict = catOrNum(df, NUMERICS)
@@ -350,7 +352,9 @@ if __name__ =='__main__':
     df, dtype_dict = makeNumeric(df, dtype_dict, MAKE_NUM_THRESH)
     
     #if too many values in reg response are categorical then terminate and warn
-    checkRegResponse(df, response, dtype_dict, PROB)
+    note = checkRegResponse(df, response, dtype_dict, PROB)
+    if note is not None:
+        sys.exit()
     
     #drop categorical columns if there are too many unique values
     df, dtype_dict = dropUniques(df, dtype_dict, UNIQUE_THRESH)
