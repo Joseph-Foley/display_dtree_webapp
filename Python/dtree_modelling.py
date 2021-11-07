@@ -79,7 +79,8 @@ def checkColLimit(cols, COL_LIMIT):
     if len(cols) > COL_LIMIT:
         print('\nCOLUMN LIMIT EXCEEDED',
               f'\nPLEASE LIMIT YOUR DATA TO {COL_LIMIT} COLUMNS')
-        sys.exit()
+        
+        return True
 
 def pickResponse(cols):
     '''

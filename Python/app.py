@@ -58,6 +58,10 @@ def main():
     #st.set_page_config(layout="wide")
     st.write('Create a Decision Tree!')
     
+    #placeholder variables
+    response = 'SELECT A COLUMN'
+    
+    #File upload
     uploaded_file = st.file_uploader(label='Upload csv file',\
                                      type=['csv'],\
                                      help='Upload a csv file that is tabular data, 5MB limit',\
@@ -73,12 +77,18 @@ def main():
         #get column headings
         cols = dtm.getColumns(df)
         
+        #check column limit
+        if dtm.checkColLimit(cols, COL_LIMIT):
+            st.error('\nCOLUMN LIMIT EXCEEDED'+\
+                     f'\nPLEASE LIMIT YOUR DATA TO {COL_LIMIT} COLUMNS')
+                
         #get user to pick a column as response variable
-        response = st.selectbox(label='Pick your response variable',\
-                                    options=cols + ['SELECT A COLUMN'],\
-                                    index=len(cols))
-        #TEMP    
-        st.write('Response Variable:', response)
+        else:
+            response = st.selectbox(label='Pick your response variable',\
+                                        options=cols + ['SELECT A COLUMN'],\
+                                        index=len(cols))
+            #TEMP    
+            st.write('Response Variable:', response)
         
         #pick problem type
         if response != 'SELECT A COLUMN':
