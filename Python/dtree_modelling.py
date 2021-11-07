@@ -300,7 +300,7 @@ def trainTree(df, PROB, response):
     
     return dtree
 
-def genTree(df, dtree, class_names, response,\
+def genTree(df, dtree, class_names, response, PROB,\
             w=14, h=6, dpi=300, fontsize=8):
     '''
     generates (& displays) a drawn dtree
@@ -311,6 +311,7 @@ def genTree(df, dtree, class_names, response,\
               class_names=class_names, filled=True, rounded=True, precision=2,\
               proportion=True, impurity=False, fontsize=fontsize)
     
+    axes.title.set_text(f'{PROB} Decision Tree for {response}')
     #save as image to memory
     mem_fig = BytesIO()
     fig.savefig(mem_fig)
@@ -372,7 +373,7 @@ if __name__ =='__main__':
     dtree = trainTree(df, PROB, response)
     
     #generate the tree graphic to BytesIO
-    mem_fig = genTree(df, dtree, class_names, response,\
+    mem_fig = genTree(df, dtree, class_names, response, PROB,\
                       w=14, h=6, dpi=125, fontsize=8)
     
     #render in console
