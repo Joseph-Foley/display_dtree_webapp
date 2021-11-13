@@ -134,12 +134,13 @@ def main():
                 #TEMP
                 #st.write('Tree Type:', tree_type)
             
-    #reveal "Go" Button (underneath columns
-    if response != 'SELECT A COLUMN'\
-    and tree_type != 'PICK TREE TYPE':
-        go_button = st.button(label='Create Decision Tree')
-        
-        #Gooo!
+        #reveal "Go" Button (underneath columns
+        if response != 'SELECT A COLUMN'\
+        and tree_type != 'PICK TREE TYPE':
+            go_button = st.button(label='Create Decision Tree')
+            
+    #Gooo!
+    try:
         if go_button:
             #make response col dtype string if Classification
             df = dtm.makeRespStr(df, response, tree_type)
@@ -193,6 +194,9 @@ def main():
                     
                     #display as image on app
                     st.image(mem_fig)
+                    
+    except UnboundLocalError:
+        pass
                 
 
 # =============================================================================
