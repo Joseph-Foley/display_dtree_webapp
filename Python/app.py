@@ -58,6 +58,9 @@ def main():
     '''
     _max_width_(SCREEN_WIDTH_PERC)
     st.title('Create a Decision Tree!')
+    st.markdown('__Got some data? Want Machine Learning to map it out as a Decision Tree?__')
+    st.markdown('__Then drag and drop it right here!__')
+    st.write('DISCLAIMER: We do not collect any of the data you use on this site! Cloud storage is expensive and we’d rather not pay for it!')
     
     #placeholder variables
     response = 'SELECT A COLUMN'
