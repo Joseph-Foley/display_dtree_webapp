@@ -57,9 +57,37 @@ def main():
     The Streamlit app
     '''
     _max_width_(SCREEN_WIDTH_PERC)
+    #Title
     st.title('Create a Decision Tree!')
+    
+    #Description
     st.markdown('__Got some data? Want Machine Learning to map it out as a Decision Tree?__')
     st.markdown('__Then drag and drop it right here!__')
+    
+    #side bar pop up tutorial
+    how_work = st.button('How does this work?')
+    if how_work:
+        st.sidebar.subheader('How does this work?')
+        
+        st.sidebar.write('Make sure your data is in csv file format.')
+        st.sidebar.write('Make sure your data is in the form of a table with the first row (and only the first) being your column headers.')
+        st.sidebar.write('*It helps to remove columns that you don’t think are relevant such as id columns.')
+        image = Image.open(r'../Images/iris_table_format.png')
+        st.sidebar.image(image, use_column_width=True)
+        
+        st.sidebar.write('Drag and drop your csv file into the upload box or find your data by selecting the “browse files” button.')
+        image = Image.open(r'../Images/dragNdrop.png')
+        st.sidebar.image(image, use_column_width=True)
+        
+        st.sidebar.write('Select the column for the variable you are trying to predict.')
+        st.sidebar.write('Select the Decision Tree type you require.')
+        st.sidebar.write('*Choose “Classification” if you are try to predict the class or type of something.')
+        st.sidebar.write('*Choose “Regression” if you are trying to predict some kind of quantity or continuous value.')
+        st.sidebar.write('Select the “Create Decision Tree” button to generate your tree.')
+        image = Image.open(r'../Images/iris_tree.png')
+        st.sidebar.image(image, use_column_width=True)
+    
+    #Disclaimer
     st.write('DISCLAIMER: We do not collect any of the data you use on this site! Cloud storage is expensive and we’d rather not pay for it!')
     
     #placeholder variables
@@ -75,29 +103,6 @@ def main():
                                          type=['csv'],\
                                          help='Upload a csv file that is tabular data, 5MB limit',\
                                          )
-        
-        #side bar pop up tutorial
-        how_work = st.button('How does this work?')
-        if how_work:
-            st.sidebar.subheader('How does this work?')
-            
-            st.sidebar.write('Make sure your data is in csv file format.')
-            st.sidebar.write('Make sure your data is in the form of a table with the first row (and only the first) being your column headers.')
-            st.sidebar.write('*It helps to remove columns that you don’t think are relevant such as id columns.')
-            image = Image.open(r'../Images/iris_table_format.png')
-            st.sidebar.image(image, use_column_width=True)
-            
-            st.sidebar.write('Drag and drop your csv file into the upload box or find your data by selecting the “browse files” button.')
-            image = Image.open(r'../Images/dragNdrop.png')
-            st.sidebar.image(image, use_column_width=True)
-            
-            st.sidebar.write('Select the column for the variable you are trying to predict.')
-            st.sidebar.write('Select the Decision Tree type you require.')
-            st.sidebar.write('*Choose “Classification” if you are try to predict the class or type of something.')
-            st.sidebar.write('*Choose “Regression” if you are trying to predict some kind of quantity or continuous value.')
-            st.sidebar.write('Select the “Create Decision Tree” button to generate your tree.')
-            image = Image.open(r'../Images/iris_tree.png')
-            st.sidebar.image(image, use_column_width=True)
        
     #right side is selection boxes
     with col2:
@@ -120,8 +125,8 @@ def main():
                 
                 #get user to pick a column as response variable
                 response = st.selectbox(label='Pick your response variable',\
-                                            options=cols + ['SELECT A COLUMN'],\
-                                            index=len(cols))
+                                        options=cols + ['SELECT A COLUMN'],\
+                                        index=len(cols))
                 #TEMP    
                 #st.write('Response Variable:', response)
             
