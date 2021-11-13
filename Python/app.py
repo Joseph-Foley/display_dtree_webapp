@@ -85,12 +85,13 @@ def main():
             st.sidebar.image(image, use_column_width=True)
             
             st.sidebar.write('Drag and drop your csv file into the upload box or find your data by selecting the “browse files” button.')
-            
+            image = Image.open(r'../Images/dragNdrop.png')
+            st.sidebar.image(image, use_column_width=True)
             
             st.sidebar.write('Select the column for the variable you are trying to predict.')
             st.sidebar.write('Select the Decision Tree type you require.')
-            st.sidebar.write('Choose “Classification” if you are try to predict the class or type of something.')
-            st.sidebar.write('Choose “Regression” if you are trying to predict some kind of quantity or continuous value.')
+            st.sidebar.write('*Choose “Classification” if you are try to predict the class or type of something.')
+            st.sidebar.write('*Choose “Regression” if you are trying to predict some kind of quantity or continuous value.')
             st.sidebar.write('Select the “Create Decision Tree” button to generate your tree.')
             image = Image.open(r'../Images/iris_tree.png')
             st.sidebar.image(image, use_column_width=True)
