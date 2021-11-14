@@ -72,11 +72,11 @@ def main():
         st.sidebar.write('Make sure your data is in csv file format.')
         st.sidebar.write('Make sure your data is in the form of a table with the first row (and only the first) being your column headers.')
         st.sidebar.write('*It helps to remove columns that you don’t think are relevant such as id columns.')
-        image = Image.open(r'Images/iris_table_format.png')
+        image = Image.open(r'Images/iris_table_format.PNG')
         st.sidebar.image(image, use_column_width=True)
         
         st.sidebar.write('Drag and drop your csv file into the upload box or find your data by selecting the “browse files” button.')
-        image = Image.open(r'Images/dragNdrop.png')
+        image = Image.open(r'Images/dragNdrop.PNG')
         st.sidebar.image(image, use_column_width=True)
         
         st.sidebar.write('Select the column for the variable you are trying to predict.')
