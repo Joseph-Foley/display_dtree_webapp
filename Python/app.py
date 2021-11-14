@@ -92,6 +92,7 @@ def main():
     
     #placeholder variables
     response = 'SELECT A COLUMN'
+    go_button = False
     
     #divide page veritcally
     col1, col2 = st.columns(2)
@@ -145,65 +146,60 @@ def main():
             go_button = st.button(label='Create Decision Tree')
             
     #Gooo!
-    try:
-        if go_button:
-            #make response col dtype string if Classification
-            df = dtm.makeRespStr(df, response, tree_type)
+    if go_button:
+        #make response col dtype string if Classification
+        df = dtm.makeRespStr(df, response, tree_type)
+        
+        #get class names if Classification
+        class_names = dtm.getClassNames(df, response, MAX_CLASSES, tree_type)
+        
+        #check to see if there weren't too many classes
+        if type(class_names) is str:
+            st.error(class_names)
+                  
+        else:
+            #determine categorical and numerical columns
+            dtype_dict = dtm.catOrNum(df, NUMERICS)
+            print('\n', dtype_dict, '\n')
             
-            #get class names if Classification
-            class_names = dtm.getClassNames(df, response, MAX_CLASSES, tree_type)
+            #process null values
+            df = dtm.processNulls(df, dtype_dict)
             
-            #check to see if there weren't too many classes
-            if type(class_names) is str:
-                st.error(class_names)
-                      
+            #make column numeric if most values are
+            df, dtype_dict = dtm.makeNumeric(df, dtype_dict, MAKE_NUM_THRESH)
+            
+            #if too many values in reg response are categorical then terminate and warn
+            note = dtm.checkRegResponse(df, response, dtype_dict, tree_type)
+            if note is not None:
+                st.error(note)
+                
             else:
-                #determine categorical and numerical columns
-                dtype_dict = dtm.catOrNum(df, NUMERICS)
-                print('\n', dtype_dict, '\n')
+                #drop categorical columns if there are too many unique values
+                df, dtype_dict, dropped = dtm.dropUniques(df, dtype_dict, UNIQUE_THRESH)
+                if dropped != []:
+                    st.warning('The following columns have been dropped as they contained too'+\
+                               f' many unique categories: \n{dropped}'+\
+                               '\nWere they meant to be categorical?\n')
                 
-                #process null values
-                df = dtm.processNulls(df, dtype_dict)
+                #limit number of categories in cat columns
+                df = dtm.limitCats(df, dtype_dict, CAT_LIMIT)
                 
-                #make column numeric if most values are
-                df, dtype_dict = dtm.makeNumeric(df, dtype_dict, MAKE_NUM_THRESH)
+                #if Classification then ordinal encode the response (for sklearn)
+                df, dtype_dict = dtm.ordinalResponse(df, response, class_names, dtype_dict, tree_type)
                 
-                #if too many values in reg response are categorical then terminate and warn
-                note = dtm.checkRegResponse(df, response, dtype_dict, tree_type)
-                if note is not None:
-                    st.error(note)
-                    
-                else:
-                    #drop categorical columns if there are too many unique values
-                    df, dtype_dict, dropped = dtm.dropUniques(df, dtype_dict, UNIQUE_THRESH)
-                    if dropped != []:
-                        st.warning('The following columns have been dropped as they contained too'+\
-                                   f' many unique categories: \n{dropped}'+\
-                                   '\nWere they meant to be categorical?\n')
-                    
-                    #limit number of categories in cat columns
-                    df = dtm.limitCats(df, dtype_dict, CAT_LIMIT)
-                    
-                    #if Classification then ordinal encode the response (for sklearn)
-                    df, dtype_dict = dtm.ordinalResponse(df, response, class_names, dtype_dict, tree_type)
-                    
-                    #one hot encode the categorical columns
-                    df = dtm.dummyVars(df, dtype_dict)
-                    
-                    #train a tree
-                    dtree = dtm.trainTree(df, tree_type, response)
-    
-                    #generate the tree graphic to BytesIO
-                    mem_fig = dtm.genTree(df, dtree, class_names, response, tree_type,\
-                                          w=14, h=6, dpi=300, fontsize=8)
-                    
-                    #display as image on app
-                    st.image(mem_fig)
-                    
-    except UnboundLocalError:
-        pass
+                #one hot encode the categorical columns
+                df = dtm.dummyVars(df, dtype_dict)
                 
+                #train a tree
+                dtree = dtm.trainTree(df, tree_type, response)
 
+                #generate the tree graphic to BytesIO
+                mem_fig = dtm.genTree(df, dtree, class_names, response, tree_type,\
+                                      w=14, h=6, dpi=300, fontsize=8)
+                
+                #display as image on app
+                st.image(mem_fig)
+                                    
 # =============================================================================
 # EXECUTE
 # =============================================================================
