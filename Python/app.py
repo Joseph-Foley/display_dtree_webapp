@@ -13,7 +13,7 @@ import pandas as pd
 import streamlit as st
 from PIL import Image
 
-import Python.dtree_modelling as dtm
+import dtree_modelling as dtm
 
 #TEMP
 from sklearn.tree import plot_tree
@@ -72,11 +72,11 @@ def main():
         st.sidebar.write('Make sure your data is in csv file format.')
         st.sidebar.write('Make sure your data is in the form of a table with the first row (and only the first) being your column headers.')
         st.sidebar.write('*It helps to remove columns that you don’t think are relevant such as id columns.')
-        image = Image.open(r'Images/iris_table_format.PNG')
+        image = Image.open(r'../Images/iris_table_format.PNG')
         st.sidebar.image(image, use_column_width=True)
         
         st.sidebar.write('Drag and drop your csv file into the upload box or find your data by selecting the “browse files” button.')
-        image = Image.open(r'Images/dragNdrop.PNG')
+        image = Image.open(r'../Images/dragNdrop.PNG')
         st.sidebar.image(image, use_column_width=True)
         
         st.sidebar.write('Select the column for the variable you are trying to predict.')
@@ -84,7 +84,7 @@ def main():
         st.sidebar.write('*Choose “Classification” if you are try to predict the class or type of something.')
         st.sidebar.write('*Choose “Regression” if you are trying to predict some kind of quantity or continuous value.')
         st.sidebar.write('Select the “Create Decision Tree” button to generate your tree.')
-        image = Image.open(r'Images/iris_tree.png')
+        image = Image.open(r'../Images/iris_tree.png')
         st.sidebar.image(image, use_column_width=True)
     
     #Disclaimer
