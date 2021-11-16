@@ -1,3 +1,4 @@
 /Docs
 /Data
 *.pyc
+Dockerrun.aws.json
