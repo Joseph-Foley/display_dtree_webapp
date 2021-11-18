@@ -88,7 +88,7 @@ def main():
         st.sidebar.image(image, use_column_width=True)
     
     #Disclaimer
-    st.write('DISCLAIMER: We do not collect any of the data you use on this site! Cloud storage is expensive and we’d rather not pay for it!')
+    st.write('DISCLAIMER:: We do not collect any of the data you use on this site! Cloud storage is expensive and we’d rather not pay for it!')
     
     #placeholder variables
     response = 'SELECT A COLUMN'
