@@ -1,3 +1,5 @@
-/Docs
+!/Docs
+/Docs/*
 /Data
 *.pyc
+!/Docs/increase file upload on EC2.txt

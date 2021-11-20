@@ -1,0 +1,22 @@
+select your instance in the EC@ dash:
+https://us-east-2.console.aws.amazon.com/ec2/v2/home?region=us-east-2#Instances:
+
+connect to the instance (a terminal in browser will appear).
+
+enter these commands
+--------------------
+cd ..
+sudo vim etc/nginx/niginx.conf
+
+--------------------
+input (above access_log line):
+client_max_body_size 5M;
+
+press esc
+
+enter these commands
+--------------------
+:w
+:q
+sudo systemctl reload nginx
+exit
