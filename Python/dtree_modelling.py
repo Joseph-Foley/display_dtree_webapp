@@ -327,6 +327,7 @@ def genTreeGV(df, dtree, class_names, response, PROB):
     
     #create png and save to memory
     graph = pydot.graph_from_dot_data(dot_data.getvalue())[0]
+    graph.set_dpi(300)
     mem_fig_gv = BytesIO(graph.create_png())
     
     return mem_fig_gv
