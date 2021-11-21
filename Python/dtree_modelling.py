@@ -9,10 +9,13 @@ import sys
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor,\
-                         plot_tree
+                         plot_tree, export_graphviz
                          
-from io import BytesIO
+from io import BytesIO, StringIO
 from PIL import Image
+
+from IPython.display import Image as ImageIpy
+import pydot 
                          
 # =============================================================================
 # DEMO DATA
@@ -28,8 +31,8 @@ DATA_PATH = '../Data/School_Attendance.csv'
 # =============================================================================
 # CONSTANTS
 # =============================================================================
-PROB = 'Classification'
-#PROB = 'Regression'
+#PROB = 'Classification'
+PROB = 'Regression'
 TREE_DEPTH = 3
 NUMERICS = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
 UNIQUE_THRESH = 0.2
@@ -293,6 +296,7 @@ def genTree(df, dtree, class_names, response, PROB,\
             w=14, h=6, dpi=300, fontsize=8):
     '''
     generates (& displays) a drawn dtree
+    WILL REMOVE
     '''
     #TODO test figsize on variety of screens
     fig, axes = plt.subplots(nrows = 1,ncols = 1,figsize = (w, h), dpi=dpi)
@@ -309,6 +313,23 @@ def genTree(df, dtree, class_names, response, PROB,\
           '\nTry renaming you columns with less characters\n')
         
     return mem_fig
+
+def genTreeGV(df, dtree, class_names, response, PROB):
+    '''
+    generates (& displays) a drawn dtree using pydot and graphviz
+    '''
+    #export to gv
+    dot_data = StringIO()  
+    export_graphviz(dtree, out_file=dot_data,\
+                    feature_names=df.drop(response, axis=1).columns,\
+                    class_names=class_names, filled=True, rounded=True,\
+                    precision=2, proportion=True, impurity=False)
+    
+    #create png and save to memory
+    graph = pydot.graph_from_dot_data(dot_data.getvalue())[0]
+    mem_fig_gv = BytesIO(graph.create_png())
+    
+    return mem_fig_gv
         
 # =============================================================================
 # EXECUTE
@@ -361,11 +382,18 @@ if __name__ =='__main__':
     #train a tree
     dtree = trainTree(df, PROB, response)
     
-    #generate the tree graphic to BytesIO
-    mem_fig = genTree(df, dtree, class_names, response, PROB,\
-                      w=14, h=6, dpi=125, fontsize=8)
+# =============================================================================
+#     #generate the tree graphic to BytesIO
+#     mem_fig = genTree(df, dtree, class_names, response, PROB,\
+#                       w=14, h=6, dpi=125, fontsize=8)
+#     
+#     #render in console
+#     mem_fig.seek(0)
+#     image_plot = Image.open(mem_fig)
+# =============================================================================
     
-    #render in console
-    mem_fig.seek(0)
-    image_plot = Image.open(mem_fig)
+    #graphviz tree image
+    mem_fig_gv = genTreeGV(df, dtree, class_names, response, PROB)
+    
+    Image.open(mem_fig_gv)
     

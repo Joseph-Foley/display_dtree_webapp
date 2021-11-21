@@ -193,12 +193,21 @@ def main():
                 #train a tree
                 dtree = dtm.trainTree(df, tree_type, response)
 
+# =============================================================================
+#                 #generate the tree graphic to BytesIO
+#                 mem_fig = dtm.genTree(df, dtree, class_names, response, tree_type,\
+#                                       w=14, h=6, dpi=300, fontsize=8)
+#                 
+#                 #display as image on app
+#                 st.image(mem_fig)
+# =============================================================================
+                
                 #generate the tree graphic to BytesIO
-                mem_fig = dtm.genTree(df, dtree, class_names, response, tree_type,\
-                                      w=14, h=6, dpi=300, fontsize=8)
+                mem_fig_gv = dtm.genTreeGV(df, dtree, class_names, response, tree_type)
                 
                 #display as image on app
-                st.image(mem_fig)
+                st.image(mem_fig_gv)
+                                    
                                     
 # =============================================================================
 # EXECUTE
