@@ -11,7 +11,7 @@ SEP = '$!@'
 
 
 #load example
-with open(r'C:\Users\JF\Desktop\git_projects\display_dtree_webapp\Data\example dtree str.txt') as f:
+with open(r'C:\Users\JF\Desktop\git_projects\display_dtree_webapp\Data\example iris str.txt') as f:
     d_str = f.read()
     
     
@@ -34,6 +34,29 @@ for exp in exps:
         #insert into main string
         d_str = d_str.replace(exp, new_str)
     
+
+#true false arrows
+# NO=============================================================================
+# ##only do this on full trees
+# if '12 -> 14' in d_str:
+#     print(True)
+# =============================================================================
+
+pat_arrow = re.compile(r'\d+ -> \d+')
+exps = pat_arrow.findall(d_str)
+
+for exp in exps:
+    to_and_from = exp.split(' -> ')
+    
+    if int(to_and_from[1]) - int(to_and_from[0]) == 1:
+        d_str = d_str.replace(exp, exp + ' [labeldistance=2.5, labelangle=45, headlabel="True"]')
+        
+    else:
+        d_str = d_str.replace(exp, exp + ' [labeldistance=2.5, labelangle=-45, headlabel="False"]')
+
+#T/F = Y/N
+d_str = d_str.replace('headlabel="True"', 'headlabel="Yes"')
+d_str = d_str.replace('headlabel="False"', 'headlabel="No"')
 
 #create png and save to memory
 graph = pydot.graph_from_dot_data(d_str)[0]
