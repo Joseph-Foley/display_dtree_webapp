@@ -314,7 +314,7 @@ def genTree(df, dtree, class_names, response, PROB,\
         
     return mem_fig
 
-def genTreeGV(df, dtree, class_names, response, PROB):
+def genTreeGV(df, dtree, class_names, response, PROB, dpi=300):
     '''
     generates (& displays) a drawn dtree using pydot and graphviz
     '''
@@ -327,7 +327,7 @@ def genTreeGV(df, dtree, class_names, response, PROB):
     
     #create png and save to memory
     graph = pydot.graph_from_dot_data(dot_data.getvalue())[0]
-    graph.set_dpi(300)
+    graph.set_dpi(dpi)
     mem_fig_gv = BytesIO(graph.create_png())
     
     return mem_fig_gv
@@ -394,7 +394,8 @@ if __name__ =='__main__':
 # =============================================================================
     
     #graphviz tree image
-    mem_fig_gv = genTreeGV(df, dtree, class_names, response, PROB)
+    mem_fig_gv = genTreeGV(df, dtree, class_names, response, PROB, dpi=10)
     
-    Image.open(mem_fig_gv)
+    image_plot = Image.open(mem_fig_gv)
+    image_plot
     
