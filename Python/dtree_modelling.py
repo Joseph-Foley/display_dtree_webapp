@@ -40,6 +40,7 @@ MAKE_NUM_THRESH = 0.95
 MAX_CLASSES = 10
 CAT_LIMIT = 10
 COL_LIMIT = 100
+SEP = '£!$'
 
 #assert MAX_CLASSES <= CAT_LIMIT
 
@@ -258,13 +259,14 @@ def ordinalResponse(df, response, class_names, dtype_dict, PROB):
         
     return df, dtype_dict
         
-def dummyVars(df, dtype_dict):
+def dummyVars(df, dtype_dict, SEP):
     '''
     create dummy variables from categoricals.
     AAAOther and first object in alphabetical order to be dropped. (helps 
     remove "No" in Yes/No columns)
     '''
-    return pd.get_dummies(df, columns=dtype_dict['cat'], drop_first=True)
+    return pd.get_dummies(df, columns=dtype_dict['cat'], drop_first=True,\
+                          prefix_sep=SEP)
         
 def processData(df):
     '''
@@ -378,7 +380,7 @@ if __name__ =='__main__':
     df, dtype_dict = ordinalResponse(df, response, class_names, dtype_dict, PROB)
     
     #one hot encode the categorical columns
-    df = dummyVars(df, dtype_dict)
+    df = dummyVars(df, dtype_dict, SEP)
     
     #train a tree
     dtree = trainTree(df, PROB, response)
@@ -394,7 +396,7 @@ if __name__ =='__main__':
 # =============================================================================
     
     #graphviz tree image
-    mem_fig_gv = genTreeGV(df, dtree, class_names, response, PROB, dpi=10)
+    mem_fig_gv = genTreeGV(df, dtree, class_names, response, PROB, dpi=90)
     
     image_plot = Image.open(mem_fig_gv)
     image_plot
