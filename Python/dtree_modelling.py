@@ -42,6 +42,7 @@ MAX_CLASSES = 10
 CAT_LIMIT = 10
 COL_LIMIT = 100
 SEP = '$!@'
+RANDOM_STATE = 99
 
 #assert MAX_CLASSES <= CAT_LIMIT
 
@@ -282,10 +283,12 @@ def trainTree(df, PROB, response):
     '''
     #Regression or Classification
     if PROB == 'Regression':
-        dtree = DecisionTreeRegressor(max_depth=TREE_DEPTH)
+        dtree = DecisionTreeRegressor(max_depth=TREE_DEPTH,\
+                                      random_state=RANDOM_STATE)
         
     elif PROB == 'Classification':
-        dtree = DecisionTreeClassifier(max_depth=TREE_DEPTH)
+        dtree = DecisionTreeClassifier(max_depth=TREE_DEPTH,\
+                                       random_state=RANDOM_STATE)
         
     else:
         print('\n\n\n!!! PROB must be Regression or Classification !!!\n\n\n')
@@ -328,8 +331,11 @@ def genTreeGV(df, dtree, class_names, response, PROB, dpi=300):
                     class_names=class_names, filled=True, rounded=True,\
                     precision=2, proportion=True, impurity=False)
     
+    #Edit the string the makes the tree
+    d_str = dot_data.getvalue()    
+        
     #create png and save to memory
-    graph = pydot.graph_from_dot_data(dot_data.getvalue())[0]
+    graph = pydot.graph_from_dot_data(d_str)[0]
     graph.set_dpi(dpi)
     mem_fig_gv = BytesIO(graph.create_png())
     
