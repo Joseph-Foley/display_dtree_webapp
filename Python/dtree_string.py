@@ -16,7 +16,11 @@ from PIL import Image
 SEP = '$!@'
 #PROB = 'Regression'
 PROB = 'Classification'
-class_names = [1,1] #so len = 2
+#class_names = [1,1] #so len = 2
+class_names = [1,1,1]
+
+if PROB == 'Regression':
+    class_names = None
 
 # =============================================================================
 # FUNCTIONS
@@ -40,7 +44,7 @@ def rgb_to_hex(rgb: tuple):
 # EXECUTE
 # =============================================================================
 #load example
-with open(r'C:\Users\JF\Desktop\git_projects\display_dtree_webapp\Data\example titanic str.txt') as f:
+with open(r'C:\Users\JF\Desktop\git_projects\display_dtree_webapp\Data\example iris str.txt') as f:
     d_str = f.read()
     
     
@@ -95,53 +99,94 @@ image_plot = Image.open(mem_fig_gv)
 image_plot
 
 #hex to rgb
-##Regression: Orange -> Green
-if PROB == 'Regression':
+# =============================================================================
+# ##Regression: Orange -> Green
+# if PROB == 'Regression':
+#     #find hex colours in string
+#     colour_pat = re.compile(r'fillcolor=\"(#.*)\"')
+#     colour_hexes = colour_pat.findall(d_str)
+#     
+#     #Loop
+#     for hexy in colour_hexes:    
+#         #Convert colour to RGB
+#         rgb = hex_to_rgb(hexy)
+#         
+#         #Make green
+#         red, green, blue = rgb
+#         red = blue
+#         rgb_new = (red, green, blue)
+#         
+#         #Convert back to hex
+#         hex_new = rgb_to_hex(rgb_new)
+#         
+#         #replace string
+#         d_str = d_str.replace(hexy, hex_new)
+# 
+# ##Binary Classification
+# if PROB == 'Classification' and len(class_names) == 2:
+#     #find hex colours in string
+#     colour_pat = re.compile(r'fillcolor=\"(#.*)\"')
+#     colour_hexes = colour_pat.findall(d_str)
+#     
+#     #Loop
+#     for hexy in colour_hexes:    
+#         #Convert colour to RGB
+#         rgb = hex_to_rgb(hexy)
+#         red, green, blue = rgb
+#         
+#         #check: orange or blue?
+#         ##blue
+#         if blue > red:
+#             #make green
+#             blue = red
+#             
+#         ##orange
+#         else:
+#             #make red
+#             green = int(green * (green/255))
+#             blue = green
+#             red = 255
+#             
+#         rgb_new = (red, green, blue)
+#         
+#         #Convert back to hex
+#         hex_new = rgb_to_hex(rgb_new)
+#         
+#         #replace string
+#         d_str = d_str.replace(hexy, hex_new)
+# 
+# =============================================================================
+#refactor
+if class_names is None \
+or len(class_names) == 2:
     #find hex colours in string
     colour_pat = re.compile(r'fillcolor=\"(#.*)\"')
-    colour_hexes = colour_pat.findall(d_str)
+    colour_hexes = colour_pat.findall(d_str)   
     
     #Loop
     for hexy in colour_hexes:    
         #Convert colour to RGB
         rgb = hex_to_rgb(hexy)
-        
-        #Make green
-        red, green, blue = rgb
-        red = blue
-        rgb_new = (red, green, blue)
-        
-        #Convert back to hex
-        hex_new = rgb_to_hex(rgb_new)
-        
-        #replace string
-        d_str = d_str.replace(hexy, hex_new)
-
-##Binary Classification
-if PROB == 'Classification' and len(class_names) == 2:
-    #find hex colours in string
-    colour_pat = re.compile(r'fillcolor=\"(#.*)\"')
-    colour_hexes = colour_pat.findall(d_str)
-    
-    #Loop
-    for hexy in colour_hexes:    
-        #Convert colour to RGB
-        rgb = hex_to_rgb(hexy)
         red, green, blue = rgb
         
-        #check: orange or blue?
-        ##blue
-        if blue > red:
+        #(Reg) orange -> green
+        if class_names is None:
+            #make green
+            red = blue
+            
+        #(Class) blue -> green
+        elif blue > red:
             #make green
             blue = red
             
-        ##orange
-        else:
+        #(Class) orange -> red
+        elif red > blue:
             #make red
             green = int(green * (green/255))
             blue = green
             red = 255
-            
+        
+        #new colour
         rgb_new = (red, green, blue)
         
         #Convert back to hex
@@ -149,7 +194,6 @@ if PROB == 'Classification' and len(class_names) == 2:
         
         #replace string
         d_str = d_str.replace(hexy, hex_new)
-    
 
 
         
