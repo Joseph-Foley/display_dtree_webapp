@@ -33,6 +33,8 @@ MAX_CLASSES = 10
 CAT_LIMIT = 10
 COL_LIMIT = 100
 SCREEN_WIDTH_PERC = 60
+SEP = '$!@'
+RANDOM_STATE = 99
 
 #assert MAX_CLASSES <= CAT_LIMIT
 
@@ -188,10 +190,10 @@ def main():
                 df, dtype_dict = dtm.ordinalResponse(df, response, class_names, dtype_dict, tree_type)
                 
                 #one hot encode the categorical columns
-                df = dtm.dummyVars(df, dtype_dict)
+                df = dtm.dummyVars(df, dtype_dict, SEP)
                 
                 #train a tree
-                dtree = dtm.trainTree(df, tree_type, response)
+                dtree = dtm.trainTree(df, tree_type, response, RANDOM_STATE)
 
 # =============================================================================
 #                 #generate the tree graphic to BytesIO

@@ -277,7 +277,7 @@ def processData(df):
     '''
     return df
 
-def trainTree(df, PROB, response):
+def trainTree(df, PROB, response, RANDOM_STATE):
     '''
     train a dtree model
     '''
