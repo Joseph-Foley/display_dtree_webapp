@@ -2,16 +2,42 @@
 """
 workshop to edit the dtree strings
 """
+# =============================================================================
+# Imports
+# =============================================================================
 import re
 import pydot 
 from io import BytesIO, StringIO
 from PIL import Image
 
+# =============================================================================
+# CONSTANTS
+# =============================================================================
 SEP = '$!@'
 
+# =============================================================================
+# FUNCTIONS
+# =============================================================================
+def hex_to_rgb(value):
+    '''
+    https://stackoverflow.com/questions/29643352
+    '''
+    value = value.lstrip('#')
+    lv = len(value)
+    return tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))
 
+
+def rgb_to_hex(rgb: tuple):
+    '''
+    https://stackoverflow.com/questions/29643352
+    '''
+    return '#%02x%02x%02x' % rgb
+
+# =============================================================================
+# EXECUTE
+# =============================================================================
 #load example
-with open(r'C:\Users\JF\Desktop\git_projects\display_dtree_webapp\Data\example iris str.txt') as f:
+with open(r'C:\Users\JF\Desktop\git_projects\display_dtree_webapp\Data\example dtree str.txt') as f:
     d_str = f.read()
     
     
@@ -64,3 +90,5 @@ graph = pydot.graph_from_dot_data(d_str)[0]
 mem_fig_gv = BytesIO(graph.create_png())
 image_plot = Image.open(mem_fig_gv)
 image_plot
+
+#hex to rgb
