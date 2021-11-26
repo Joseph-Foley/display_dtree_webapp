@@ -21,11 +21,11 @@ import pydot
 # DEMO DATA
 # =============================================================================
 #DATA_PATH = '../Data/Telco data TC fix_resp_int.csv'
-DATA_PATH = '../Data/Telco data TC fix.csv'
+#DATA_PATH = '../Data/Telco data TC fix.csv'
 #DATA_PATH = '../Data/Bike share data (atemp-weather fix).csv'
 #DATA_PATH = '../Data/School_Attendance.csv'
 #DATA_PATH = '../Data/T20 International Dataset_SMALL.csv'
-#DATA_PATH = '../Data/titanic_data.csv'
+DATA_PATH = '../Data/titanic_data.csv'
 #DATA_PATH = '../Data/us2021census.csv'
 #DATA_PATH = '../Data/iris.csv'
 

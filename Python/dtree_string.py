@@ -14,11 +14,14 @@ from PIL import Image
 # CONSTANTS
 # =============================================================================
 SEP = '$!@'
+#PROB = 'Regression'
+PROB = 'Classification'
+class_names = [1,1] #so len = 2
 
 # =============================================================================
 # FUNCTIONS
 # =============================================================================
-def hex_to_rgb(value):
+def hex_to_rgb(value: str):
     '''
     https://stackoverflow.com/questions/29643352
     '''
@@ -37,7 +40,7 @@ def rgb_to_hex(rgb: tuple):
 # EXECUTE
 # =============================================================================
 #load example
-with open(r'C:\Users\JF\Desktop\git_projects\display_dtree_webapp\Data\example dtree str.txt') as f:
+with open(r'C:\Users\JF\Desktop\git_projects\display_dtree_webapp\Data\example titanic str.txt') as f:
     d_str = f.read()
     
     
@@ -92,3 +95,68 @@ image_plot = Image.open(mem_fig_gv)
 image_plot
 
 #hex to rgb
+##Regression: Orange -> Green
+if PROB == 'Regression':
+    #find hex colours in string
+    colour_pat = re.compile(r'fillcolor=\"(#.*)\"')
+    colour_hexes = colour_pat.findall(d_str)
+    
+    #Loop
+    for hexy in colour_hexes:    
+        #Convert colour to RGB
+        rgb = hex_to_rgb(hexy)
+        
+        #Make green
+        red, green, blue = rgb
+        red = blue
+        rgb_new = (red, green, blue)
+        
+        #Convert back to hex
+        hex_new = rgb_to_hex(rgb_new)
+        
+        #replace string
+        d_str = d_str.replace(hexy, hex_new)
+
+##Binary Classification
+if PROB == 'Classification' and len(class_names) == 2:
+    #find hex colours in string
+    colour_pat = re.compile(r'fillcolor=\"(#.*)\"')
+    colour_hexes = colour_pat.findall(d_str)
+    
+    #Loop
+    for hexy in colour_hexes:    
+        #Convert colour to RGB
+        rgb = hex_to_rgb(hexy)
+        red, green, blue = rgb
+        
+        #check: orange or blue?
+        ##blue
+        if blue > red:
+            #make green
+            blue = red
+            
+        ##orange
+        else:
+            #make red
+            green = int(green * (green/255))
+            blue = green
+            red = 255
+            
+        rgb_new = (red, green, blue)
+        
+        #Convert back to hex
+        hex_new = rgb_to_hex(rgb_new)
+        
+        #replace string
+        d_str = d_str.replace(hexy, hex_new)
+    
+
+
+        
+        
+#create png and save to memory
+graph = pydot.graph_from_dot_data(d_str)[0]
+#graph.set_dpi(dpi)
+mem_fig_gv = BytesIO(graph.create_png())
+image_plot = Image.open(mem_fig_gv)
+image_plot
