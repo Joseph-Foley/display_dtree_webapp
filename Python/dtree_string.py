@@ -89,7 +89,7 @@ def changeArrowText(d_str):
     
     return d_str
 
-def changeHexColours(d_str):
+def changeHexColours(d_str, class_names):
     '''
     Change default d_tree colours for regression and binary classification
     to red and green. Other models, no change.
@@ -135,13 +135,13 @@ def changeHexColours(d_str):
             
     return d_str
 
-def changeDtreeString(d_str, SEP):
+def changeDtreeString(d_str, SEP, class_names):
     """
     Combines the 3 string changing functions
     """
     d_str = changeCatNodes(d_str, SEP)
     d_str = changeArrowText(d_str)
-    d_str = changeHexColours(d_str)
+    d_str = changeHexColours(d_str, class_names)
     
     return d_str
 # =============================================================================

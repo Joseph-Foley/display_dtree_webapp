@@ -16,7 +16,8 @@ from PIL import Image
 
 from IPython.display import Image as ImageIpy
 import pydot 
-                         
+
+from dtree_string import changeDtreeString         
 # =============================================================================
 # DEMO DATA
 # =============================================================================
@@ -320,7 +321,7 @@ def genTree(df, dtree, class_names, response, PROB,\
         
     return mem_fig
 
-def genTreeGV(df, dtree, class_names, response, PROB, dpi=300):
+def genTreeGV(df, dtree, class_names, response, PROB, SEP, dpi=300):
     '''
     generates (& displays) a drawn dtree using pydot and graphviz
     '''
@@ -331,8 +332,9 @@ def genTreeGV(df, dtree, class_names, response, PROB, dpi=300):
                     class_names=class_names, filled=True, rounded=True,\
                     precision=2, proportion=True, impurity=False)
     
-    #Edit the string the makes the tree
+    #Edit the string that makes the tree
     d_str = dot_data.getvalue()    
+    d_str = changeDtreeString(d_str, SEP, class_names)
         
     #create png and save to memory
     graph = pydot.graph_from_dot_data(d_str)[0]
@@ -390,7 +392,7 @@ if __name__ =='__main__':
     df = dummyVars(df, dtype_dict, SEP)
     
     #train a tree
-    dtree = trainTree(df, PROB, response)
+    dtree = trainTree(df, PROB, response, RANDOM_STATE)
     
 # =============================================================================
 #     #generate the tree graphic to BytesIO
@@ -403,7 +405,7 @@ if __name__ =='__main__':
 # =============================================================================
     
     #graphviz tree image
-    mem_fig_gv = genTreeGV(df, dtree, class_names, response, PROB, dpi=90)
+    mem_fig_gv = genTreeGV(df, dtree, class_names, response, PROB, SEP, dpi=90)
     
     image_plot = Image.open(mem_fig_gv)
     image_plot
