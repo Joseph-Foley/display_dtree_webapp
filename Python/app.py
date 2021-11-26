@@ -205,7 +205,7 @@ def main():
 # =============================================================================
                 
                 #generate the tree graphic to BytesIO
-                mem_fig_gv = dtm.genTreeGV(df, dtree, class_names, response, tree_type)
+                mem_fig_gv = dtm.genTreeGV(df, dtree, class_names, response, tree_type, SEP)
                 
                 #display as image on app
                 st.image(mem_fig_gv)
