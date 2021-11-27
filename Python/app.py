@@ -90,7 +90,7 @@ def main():
         st.sidebar.image(image, use_column_width=True)
         
         st.sidebar.markdown('Click the icon at the top right of the Tree to enlarge the image')
-        image = Image.open(r'../Images/enlarge_icon.png')
+        image = Image.open(r'../Images/enlarge_icon.PNG')
         st.sidebar.image(image)
         
         st.sidebar.markdown('__Interpreting Nodes__')
@@ -99,14 +99,14 @@ def main():
         st.sidebar.markdown('‘value’ shows the proportion of each class at the node.')
         st.sidebar.markdown('‘class’ the class that is most represented by the node.')
         st.sidebar.markdown('The color is an indication of how sure the tree is of its class prediction. The darker the color, the more sure it is.')
-        image = Image.open(r'../Images/class_nodes.png')
+        image = Image.open(r'../Images/class_nodes.PNG')
         st.sidebar.image(image, use_column_width=True)
         
         st.sidebar.markdown('__Regression:__')
         st.sidebar.markdown('‘samples’ shows the percentage of your data that is represented by the node')
         st.sidebar.markdown('‘value’ shows the average value of your response variable at the node.')
         st.sidebar.markdown('The color reflects the magnitude of the value. The larger the value, the darker the color.')
-        image = Image.open(r'../Images/reg_nodes.png')
+        image = Image.open(r'../Images/reg_nodes.PNG')
         st.sidebar.image(image, use_column_width=True)
         
     #Disclaimer
