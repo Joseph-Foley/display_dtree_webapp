@@ -321,7 +321,7 @@ def genTree(df, dtree, class_names, response, PROB,\
         
     return mem_fig
 
-def genTreeGV(df, dtree, class_names, response, PROB, SEP, dpi=300):
+def genTreeGV(df, dtree, class_names, response, PROB, SEP, dpi=300, t_fontsize=9):
     '''
     generates (& displays) a drawn dtree using pydot and graphviz
     '''
@@ -340,8 +340,16 @@ def genTreeGV(df, dtree, class_names, response, PROB, SEP, dpi=300):
     graph = pydot.graph_from_dot_data(d_str)[0]
     graph.set_dpi(dpi)
     mem_fig_gv = BytesIO(graph.create_png())
+    image_png = Image.open(mem_fig_gv)
     
-    return mem_fig_gv
+    #Add title to chart
+    fig, axes = plt.subplots(nrows = 1,ncols = 1, dpi=dpi)
+    axes.title.set_text(f'{PROB} Decision Tree for {response}')
+    axes.title.set_fontsize(t_fontsize)
+    plt.axis('off')
+    imgplot = plt.imshow(image_png)
+    
+    return fig
         
 # =============================================================================
 # EXECUTE
@@ -405,8 +413,11 @@ if __name__ =='__main__':
 # =============================================================================
     
     #graphviz tree image
-    mem_fig_gv = genTreeGV(df, dtree, class_names, response, PROB, SEP, dpi=90)
+    imgplot = genTreeGV(df, dtree, class_names, response, PROB, SEP, dpi=250)
     
-    image_plot = Image.open(mem_fig_gv)
-    image_plot
-    
+# =============================================================================
+#     image_plot = Image.open(mem_fig_gv)
+#     image_plot
+#     
+# =============================================================================
+    plt.show()

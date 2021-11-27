@@ -9,6 +9,8 @@ import re
 import pydot 
 from io import BytesIO
 from PIL import Image
+import matplotlib.pyplot as plt
+
 
 # =============================================================================
 # CONSTANTS
@@ -153,7 +155,7 @@ if __name__ =='__main__':
         d_str = f.read()
     
     #change the string
-    d_str = changeDtreeString(d_str, SEP)  
+    d_str = changeDtreeString(d_str, SEP, class_names)  
          
     #create png and save to memory
     graph = pydot.graph_from_dot_data(d_str)[0]
@@ -161,3 +163,12 @@ if __name__ =='__main__':
     mem_fig_gv = BytesIO(graph.create_png())
     image_plot = Image.open(mem_fig_gv)
     image_plot
+    
+    
+
+    dpi=100
+    fig, axes = plt.subplots(nrows = 1,ncols = 1, dpi=dpi)
+    axes.title.set_text('{PROB} Decision Tree for {response}')
+    plt.axis('off')
+    imgplot = plt.imshow(image_plot)
+    plt.show()
