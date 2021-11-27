@@ -79,11 +79,11 @@ def changeArrowText(d_str):
         
         if int(to_and_from[1]) - int(to_and_from[0]) == 1:
             str_T = ' [labeldistance=2.5, labelangle=45, headlabel="True"]'
-            d_str = d_str.replace(exp, exp + str_T)
+            d_str = d_str.replace(exp, exp + str_T, 1)
             
         else:
             str_F = ' [labeldistance=2.5, labelangle=-45, headlabel="False"]'
-            d_str = d_str.replace(exp, exp + str_F)
+            d_str = d_str.replace(exp, exp + str_F, 1)
     
     #T/F = Y/N
     d_str = d_str.replace('headlabel="True"', 'headlabel="Yes"')
@@ -151,7 +151,7 @@ def changeDtreeString(d_str, SEP, class_names):
 # =============================================================================
 if __name__ =='__main__':
     #load example
-    with open(r'C:\Users\JF\Desktop\git_projects\display_dtree_webapp\Data\example dtree str.txt') as f:
+    with open(r'C:\Users\JF\Desktop\git_projects\display_dtree_webapp\Data\example US_pop str.txt') as f:
         d_str = f.read()
     
     #change the string

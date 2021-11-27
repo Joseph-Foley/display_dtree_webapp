@@ -23,11 +23,11 @@ from dtree_string import changeDtreeString
 # =============================================================================
 #DATA_PATH = '../Data/Telco data TC fix_resp_int.csv'
 #DATA_PATH = '../Data/Telco data TC fix.csv'
-DATA_PATH = '../Data/Bike share data (atemp-weather fix).csv'
+#DATA_PATH = '../Data/Bike share data (atemp-weather fix).csv'
 #DATA_PATH = '../Data/School_Attendance.csv'
 #DATA_PATH = '../Data/T20 International Dataset_SMALL.csv'
 #DATA_PATH = '../Data/titanic_data.csv'
-#DATA_PATH = '../Data/us2021census.csv'
+DATA_PATH = '../Data/us2021census.csv'
 #DATA_PATH = '../Data/iris.csv'
 
 # =============================================================================
@@ -321,7 +321,8 @@ def genTree(df, dtree, class_names, response, PROB,\
         
     return mem_fig
 
-def genTreeGV(df, dtree, class_names, response, PROB, SEP, dpi=300, t_fontsize=9):
+def genTreeGV(df, dtree, class_names, response, PROB, SEP, dpi=300,\
+              title_size=8):
     '''
     generates (& displays) a drawn dtree using pydot and graphviz
     '''
@@ -345,7 +346,7 @@ def genTreeGV(df, dtree, class_names, response, PROB, SEP, dpi=300, t_fontsize=9
     #Add title to chart
     fig, axes = plt.subplots(nrows = 1,ncols = 1, dpi=dpi)
     axes.title.set_text(f'{PROB} Decision Tree for {response}')
-    axes.title.set_fontsize(t_fontsize)
+    axes.title.set_fontsize(title_size)
     plt.axis('off')
     imgplot = plt.imshow(image_png)
     
