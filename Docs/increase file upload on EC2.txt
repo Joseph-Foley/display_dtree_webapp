@@ -6,7 +6,7 @@ connect to the instance (a terminal in browser will appear).
 enter these commands
 --------------------
 cd ..
-sudo vim etc/nginx/niginx.conf
+sudo vim etc/nginx/nginx.conf
 
 --------------------
 input (above access_log line):
