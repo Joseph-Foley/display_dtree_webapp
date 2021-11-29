@@ -21,6 +21,7 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 
 import os
+import shutil
 
 # =============================================================================
 # CONSTANTS
@@ -53,12 +54,27 @@ def _max_width_(SCREEN_WIDTH_PERC):
                 </style>    
                 """, 
                 unsafe_allow_html=True)
+
+def editIndexFile():
+    """
+    Take index.html file in repo and move it to base streamlit folder
+    """
+    #get streamlit file location
+    st_dir = os.path.join(os.path.dirname(st.__file__), 'static', 'index.html')
     
+    #replace the index file there with one in current dir
+    shutil.copyfile('index.html', st_dir)
+        
 def main():
     '''
     The Streamlit app
     '''
+    #replace default html template
+    editIndexFile()
+    
+    #set desired width
     _max_width_(SCREEN_WIDTH_PERC)
+    
     #Title
     st.title('Create a Decision Tree!')
     
