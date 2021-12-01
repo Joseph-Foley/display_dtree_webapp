@@ -7,4 +7,4 @@ RUN pip install -r requirements.txt
 WORKDIR /app/Python
 EXPOSE 8501
 ENTRYPOINT ["streamlit","run"]
-CMD ["app.py","--server.maxUploadSize=5"]
+CMD ["CreateDecisionTree.py","--server.maxUploadSize=5"]
