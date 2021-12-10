@@ -60,10 +60,13 @@ def editIndexFile():
     Take index.html file in repo and move it to base streamlit folder
     """
     #get streamlit file location
-    st_dir = os.path.join(os.path.dirname(st.__file__), 'static', 'index.html')
+    st_dir = os.path.join(os.path.dirname(st.__file__), 'static')
     
     #replace the index file there with one in current dir
-    shutil.copyfile('index.html', st_dir)
+    shutil.copyfile('index.html', os.path.join(st_dir, 'index.html'))
+    
+    #replace favicon image too
+    shutil.copyfile('favicon.png', os.path.join(st_dir, 'favicon.png'))
         
 def main():
     '''
