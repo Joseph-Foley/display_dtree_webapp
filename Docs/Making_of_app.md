@@ -114,9 +114,9 @@ This is how you enable load balancing:
 
 <https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features-managing-env-types.html#using-features.managing.changetype>
 
-**But!! **You must switch the **listener protocol** from https to TCP (streamlit has issues loading the full app otherwise). <https://stackoverflow.com/questions/27436110/websockets-with-aws-and-elastic-beanstalk/39604687>
+**But!!** You must switch the **listener protocol** from https to TCP (streamlit has issues loading the full app otherwise). <https://stackoverflow.com/questions/27436110/websockets-with-aws-and-elastic-beanstalk/39604687>
 
-**And then! **You just gotta physically type "https" along with your URL in web browser for this to work. So yes, the unsecure http version of the site is still there. Just never go there once this is done.
+**And then!** You just gotta physically type "https" along with your URL in web browser for this to work. So yes, the unsecure http version of the site is still there. Just never go there once this is done.
 ## 
 **Google Analytics**
 
