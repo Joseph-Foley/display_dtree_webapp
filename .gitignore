@@ -3,3 +3,4 @@
 /Data
 *.pyc
 !/Docs/increase file upload on EC2.txt
+!/Docs/making_of_app.md
