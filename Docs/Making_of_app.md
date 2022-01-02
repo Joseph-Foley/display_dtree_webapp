@@ -117,6 +117,8 @@ This is how you enable load balancing:
 **But!!** You must switch the **listener protocol** from https to TCP (streamlit has issues loading the full app otherwise). <https://stackoverflow.com/questions/27436110/websockets-with-aws-and-elastic-beanstalk/39604687>
 
 **And then!** You just gotta physically type "https" along with your URL in web browser for this to work. So yes, the unsecure http version of the site is still there. Just never go there once this is done.
+
+Note: Enabling Load balancing costs 50cents a day (slightly more than a T3 small instance).
 ## 
 **Google Analytics**
 
