@@ -27,14 +27,15 @@ from dtree_string import changeDtreeString
 #DATA_PATH = '../Data/School_Attendance.csv'
 #DATA_PATH = '../Data/T20 International Dataset_SMALL.csv'
 #DATA_PATH = '../Data/titanic_data.csv'
-DATA_PATH = '../Data/us2021census.csv'
+#DATA_PATH = '../Data/us2021census.csv'
 #DATA_PATH = '../Data/iris.csv'
+DATA_PATH = '../Data/iris_blank_test.csv'
 
 # =============================================================================
 # CONSTANTS
 # =============================================================================
-#PROB = 'Classification'
-PROB = 'Regression'
+PROB = 'Classification'
+#PROB = 'Regression'
 TREE_DEPTH = 3
 NUMERICS = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
 UNIQUE_THRESH = 0.2
@@ -144,7 +145,14 @@ def processNulls(df, dtype_dict):
     '''
     #median for numerical
     for col in dtype_dict['num']:
-        df[col] = df[col].fillna(round(df[col].median(),0))
+        
+        #if all null then set to zero.
+        if df[col].isna().sum() == len(df):
+            df[col] = 0
+        
+        #otherwise input median
+        else:
+            df[col] = df[col].fillna(round(df[col].median(),0))
         
     #'NULL' for cat
     for col in dtype_dict['cat']:
