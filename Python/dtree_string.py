@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 """
-workshop to edit the dtree strings
+Utility script that edits the strings which make up the dtree.
+Changes from default:
+    Node colours
+    Categorical node operators
+    Arrow text
 """
 # =============================================================================
 # Imports
 # =============================================================================
 import re
-import pydot 
+import pydot
+import matplotlib.pyplot as plt
 from io import BytesIO
 from PIL import Image
-import matplotlib.pyplot as plt
-
-
 # =============================================================================
 # CONSTANTS
 # =============================================================================
@@ -69,6 +71,9 @@ def changeCatNodes(d_str, SEP):
     return d_str
 
 def changeArrowText(d_str):
+    '''
+    Arrow text to be on EVERY arrow. Changed to "Yes" & "No"
+    '''
     #find arrow strings
     pat_arrow = re.compile(r'\d+ -> \d+')
     exps = pat_arrow.findall(d_str)
