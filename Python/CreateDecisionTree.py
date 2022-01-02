@@ -9,19 +9,12 @@ Create Tree.
 # =============================================================================
 # IMPORTS
 # =============================================================================
-import pandas as pd
+import os
+import shutil
 import streamlit as st
 from PIL import Image
 
 import dtree_modelling as dtm
-
-#TEMP
-from sklearn.tree import plot_tree
-import matplotlib.pyplot as plt
-from io import BytesIO
-
-import os
-import shutil
 
 # =============================================================================
 # CONSTANTS
@@ -36,6 +29,7 @@ COL_LIMIT = 100
 SCREEN_WIDTH_PERC = 60
 SEP = '$!@'
 RANDOM_STATE = 99
+BLOG = 'https://medium.com/mlearning-ai/a-neat-web-app-to-map-out-your-data-with-a-decision-tree-b9f77c5600c7'
 
 #assert MAX_CLASSES <= CAT_LIMIT
 
@@ -82,7 +76,8 @@ def main():
     st.title('Create a Decision Tree!')
     
     #Description
-    st.markdown('__Got some data? Want Machine Learning to map it out as a Decision Tree?__')
+    st.markdown('__Got some data? Want Machine Learning' +\
+                ' to map it out as a Decision Tree?__')
     st.markdown('__Then drag and drop it right here!__')
     
     #side bar pop up tutorial
@@ -91,42 +86,64 @@ def main():
         st.sidebar.subheader('How does this work?')
         
         st.sidebar.write('Make sure your data is in csv file format.')
-        st.sidebar.write('Make sure your data is in the form of a table with the first row (and only the first) being your column headers.')
-        st.sidebar.write('*It helps to remove columns that you don’t think are relevant such as id columns.')
+        st.sidebar.write('Make sure your data is in the form of a table ' +\
+                         'with the first row (and only the first) being ' +\
+                         'your column headers.')
+        st.sidebar.write('*It helps to remove columns that you don’t think ' +\
+                         'are relevant such as id columns.')
         image = Image.open(r'../Images/iris_table_format.PNG')
         st.sidebar.image(image, use_column_width=True)
         
-        st.sidebar.write('Drag and drop your csv file into the upload box or find your data by selecting the “browse files” button.')
+        st.sidebar.write('Drag and drop your csv file into the upload box ' +\
+                         'or find your data by selecting the ' +\
+                         '“browse files” button.')
         image = Image.open(r'../Images/dragNdrop.PNG')
         st.sidebar.image(image, use_column_width=True)
         
-        st.sidebar.write('Select the column for the variable you are trying to predict.')
+        st.sidebar.write('Select the column for the variable you are ' +\
+                         'trying to predict.')
         st.sidebar.write('Select the Decision Tree type you require.')
-        st.sidebar.write('*Choose “Classification” if you are try to predict the class or type of something.')
-        st.sidebar.write('*Choose “Regression” if you are trying to predict some kind of quantity or continuous value.')
-        st.sidebar.write('Select the “Create Decision Tree” button to generate your tree.')
+        st.sidebar.write('*Choose “Classification” if you are try to ' +\
+                         'predict the class or type of something.')
+        st.sidebar.write('*Choose “Regression” if you are trying to ' +\
+                         'predict some kind of quantity or continuous value.')
+        st.sidebar.write('Select the “Create Decision Tree” button ' +\
+                         'to generate your tree.')
         image = Image.open(r'../Images/iris_tree.png')
         st.sidebar.image(image, use_column_width=True)
         
-        st.sidebar.markdown('Click the icon at the top right of the Tree to enlarge the image')
+        st.sidebar.markdown('Click the icon at the top right of the Tree ' +\
+                            'to enlarge the image')
         image = Image.open(r'../Images/enlarge_icon.PNG')
         st.sidebar.image(image)
         
         st.sidebar.markdown('__Interpreting Nodes__')
         st.sidebar.markdown('__Classification:__')
-        st.sidebar.markdown('‘samples’ shows the percentage of your data that is represented by the node')
-        st.sidebar.markdown('‘value’ shows the proportion of each class at the node.')
-        st.sidebar.markdown('‘class’ the class that is most represented by the node.')
-        st.sidebar.markdown('The color is an indication of how sure the tree is of its class prediction. The darker the color, the more sure it is.')
+        st.sidebar.markdown('‘samples’ shows the percentage of your data ' +\
+                            'that is represented by the node')
+        st.sidebar.markdown('‘value’ shows the proportion of each class ' +\
+                            'at the node.')
+        st.sidebar.markdown('‘class’ the class that is most represented ' +\
+                            'by the node.')
+        st.sidebar.markdown('The color is an indication of how sure the ' +\
+                            'tree is of its class prediction. ' +\
+                            'The darker the color, the more sure it is.')
         image = Image.open(r'../Images/class_nodes.PNG')
         st.sidebar.image(image, use_column_width=True)
         
         st.sidebar.markdown('__Regression:__')
-        st.sidebar.markdown('‘samples’ shows the percentage of your data that is represented by the node')
-        st.sidebar.markdown('‘value’ shows the average value of your response variable at the node.')
-        st.sidebar.markdown('The color reflects the magnitude of the value. The larger the value, the darker the color.')
+        st.sidebar.markdown('‘samples’ shows the percentage of your data ' +\
+                            'that is represented by the node')
+        st.sidebar.markdown('‘value’ shows the average value of your ' +\
+                            'response variable at the node.')
+        st.sidebar.markdown('The color reflects the magnitude of the ' +\
+                            'value. The larger the value, the darker the ' +\
+                            'color.')
         image = Image.open(r'../Images/reg_nodes.PNG')
         st.sidebar.image(image, use_column_width=True)
+        
+        st.sidebar.markdown(f'Check out this [link]({BLOG}) ' +\
+                            'for example use cases')
         
     #Disclaimer
     st.write('DISCLAIMER: We do not collect any of the data you use on this site! Cloud storage is expensive and we’d rather not pay for it!')
