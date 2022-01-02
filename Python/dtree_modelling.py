@@ -51,8 +51,8 @@ RANDOM_STATE = 99
 # =============================================================================
 def loadData(DATA_PATH):
     '''
-    TEMP: pandas load csv
-    FUTURE: streamlit pass thru
+    CURRENT: Pandas load csv
+    FUTURE: Pandas load excel
     '''
     df = pd.read_csv(DATA_PATH, encoding_errors='ignore')
     
@@ -60,8 +60,7 @@ def loadData(DATA_PATH):
 
 def getColumns(df):
     '''
-    TEMP: pandas cols list
-    FUTURE: feed back to streamlit app
+    Pandas cols list
     '''
     cols = list(df.columns)
     
@@ -139,7 +138,7 @@ def catOrNum(df, NUMERICS):
 
 def processNulls(df, dtype_dict):
     '''
-    substitue values for null cells
+    Substitue values for null cells
     '''
     #median for numerical
     for col in dtype_dict['num']:
@@ -185,7 +184,7 @@ def makeNumeric(df, dtype_dict, MAKE_NUM_THRESH):
             
 def checkRegResponse(df, response, dtype_dict, PROB):
     '''
-    if there still too many non numerical columns in Regression response then
+    If there still too many non numerical columns in Regression response then
     terminate.
     '''
     if PROB == 'Regression'\
@@ -193,8 +192,8 @@ def checkRegResponse(df, response, dtype_dict, PROB):
         
         note = '\nResponse variable has too many non numerical values,\n'+\
                'Are you sure this is a Regression problem? \n'+\
-               'If so then edit the response column so that it only contains '+\
-               'numerical values\n'
+               'If so then edit the response column so that it only '+\
+               'contains numerical values\n'
         
         print(note)
         
@@ -202,7 +201,7 @@ def checkRegResponse(df, response, dtype_dict, PROB):
         
 def dropUniques(df, dtype_dict, UNIQUE_THRESH):
     '''
-    drop categorical columns that have too many unique values.
+    Drop categorical columns that have too many unique values.
     UNIQUE_THRESH: % of col that must not be unique
     '''
     cat_cols = dtype_dict['cat'].copy()
@@ -244,7 +243,7 @@ def limitCats(df, dtype_dict, CAT_LIMIT):
 
 def ordinalResponse(df, response, class_names, dtype_dict, PROB):
     '''
-    response var in categorical problems needs to be in ordinal format
+    Response var in categorical problems needs to be in ordinal format
     e.g. red, green, blue => 0, 1, 2
     '''
     if PROB == 'Regression':
@@ -270,23 +269,16 @@ def ordinalResponse(df, response, class_names, dtype_dict, PROB):
         
 def dummyVars(df, dtype_dict, SEP):
     '''
-    create dummy variables from categoricals.
+    Create dummy variables from categoricals.
     AAAOther and first object in alphabetical order to be dropped. (helps 
     remove "No" in Yes/No columns)
     '''
     return pd.get_dummies(df, columns=dtype_dict['cat'], drop_first=True,\
-                          prefix_sep=SEP)
-        
-def processData(df):
-    '''
-    Combines preprocessing functions to make data ready for modelling
-    checkRegResponse might need to be outside this tho
-    '''
-    return df
+                          prefix_sep=SEP)  
 
 def trainTree(df, PROB, response, RANDOM_STATE):
     '''
-    train a dtree model
+    Train a dtree model
     '''
     #Regression or Classification
     if PROB == 'Regression':
@@ -305,32 +297,10 @@ def trainTree(df, PROB, response, RANDOM_STATE):
     
     return dtree
 
-def genTree(df, dtree, class_names, response, PROB,\
-            w=14, h=6, dpi=300, fontsize=8):
-    '''
-    generates (& displays) a drawn dtree
-    WILL REMOVE
-    '''
-    #TODO test figsize on variety of screens
-    fig, axes = plt.subplots(nrows = 1,ncols = 1,figsize = (w, h), dpi=dpi)
-    plot_tree(dtree, feature_names=df.drop(response, axis=1).columns,\
-              class_names=class_names, filled=True, rounded=True, precision=2,\
-              proportion=True, impurity=False, fontsize=fontsize)
-    
-    axes.title.set_text(f'{PROB} Decision Tree for {response}')
-    #save as image to memory
-    mem_fig = BytesIO()
-    fig.savefig(mem_fig)
-    
-    print('\nTree nodes looking at bit small?',\
-          '\nTry renaming you columns with less characters\n')
-        
-    return mem_fig
-
 def genTreeGV(df, dtree, class_names, response, PROB, SEP, dpi=300,\
               title_size=8):
     '''
-    generates (& displays) a drawn dtree using pydot and graphviz
+    Generates and saves a drawn dtree to memory using pydot and graphviz
     '''
     #export to gv
     dot_data = StringIO()  
@@ -401,7 +371,8 @@ if __name__ =='__main__':
     df = limitCats(df, dtype_dict, CAT_LIMIT)
     
     #if Classification then ordinal encode the response (for sklearn)
-    df, dtype_dict = ordinalResponse(df, response, class_names, dtype_dict, PROB)
+    df, dtype_dict = ordinalResponse(df, response, class_names, dtype_dict,\
+                                     PROB)
     
     #one hot encode the categorical columns
     df = dummyVars(df, dtype_dict, SEP)
@@ -409,22 +380,6 @@ if __name__ =='__main__':
     #train a tree
     dtree = trainTree(df, PROB, response, RANDOM_STATE)
     
-# =============================================================================
-#     #generate the tree graphic to BytesIO
-#     mem_fig = genTree(df, dtree, class_names, response, PROB,\
-#                       w=14, h=6, dpi=125, fontsize=8)
-#     
-#     #render in console
-#     mem_fig.seek(0)
-#     image_plot = Image.open(mem_fig)
-# =============================================================================
-    
     #graphviz tree image
     imgplot = genTreeGV(df, dtree, class_names, response, PROB, SEP, dpi=250)
-    
-# =============================================================================
-#     image_plot = Image.open(mem_fig_gv)
-#     image_plot
-#     
-# =============================================================================
     plt.show()
