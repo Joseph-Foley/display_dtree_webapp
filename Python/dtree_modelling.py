@@ -6,17 +6,15 @@ Backend of the project. This will make the dtree model and generate the plot
 # IMPORTS
 # =============================================================================
 import sys
+import pydot
 import pandas as pd
 import matplotlib.pyplot as plt
+
+from io import BytesIO, StringIO
+from PIL import Image
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor,\
                          plot_tree, export_graphviz
                          
-from io import BytesIO, StringIO
-from PIL import Image
-
-from IPython.display import Image as ImageIpy
-import pydot 
-
 from dtree_string import changeDtreeString         
 # =============================================================================
 # DEMO DATA
