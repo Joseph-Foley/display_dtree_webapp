@@ -14,8 +14,10 @@ from io import BytesIO, StringIO
 from PIL import Image
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor,\
                          plot_tree, export_graphviz
-                         
-from dtree_string import changeDtreeString         
+try: 
+    from dtree_string import changeDtreeString  
+except ModuleNotFoundError:
+    from Python.dtree_string import changeDtreeString         
 # =============================================================================
 # DEMO DATA
 # =============================================================================
