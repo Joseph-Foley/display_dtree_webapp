@@ -14,7 +14,10 @@ import shutil
 import streamlit as st
 from PIL import Image
 
-import Python.dtree_modelling as dtm
+try: 
+    import Python.dtree_modelling as dtm 
+except ModuleNotFoundError:
+    import dtree_modelling as dtm        
 
 # =============================================================================
 # CONSTANTS
@@ -27,7 +30,7 @@ MAX_CLASSES = 10
 CAT_LIMIT = 10
 COL_LIMIT = 100
 SCREEN_WIDTH_PERC = 60
-SEP = '$!@'
+SEP = '_'
 RANDOM_STATE = 99
 BLOG = 'https://medium.com/mlearning-ai/a-neat-web-app-to-map-out-your-data-with-a-decision-tree-b9f77c5600c7'
 
@@ -261,11 +264,11 @@ def main():
                 dtree = dtm.trainTree(df, tree_type, response, RANDOM_STATE)
 
                 #generate the tree graphic to BytesIO
-                fig = dtm.genTreeGV(df, dtree, class_names, response,\
-                                    tree_type, SEP)
+                mem_fig = dtm.genTree(df, dtree, class_names, response, tree_type,\
+                                      w=14, h=6, dpi=300, fontsize=8)
                 
                 #display as image on app
-                st.pyplot(fig)
+                st.image(mem_fig)
                                                                      
 # =============================================================================
 # EXECUTE

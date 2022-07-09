@@ -10,7 +10,7 @@ Changes from default:
 # Imports
 # =============================================================================
 import re
-import pydot
+#import pydot
 import matplotlib.pyplot as plt
 from io import BytesIO
 from PIL import Image

@@ -6,18 +6,14 @@ Backend of the project. This will make the dtree model and generate the plot
 # IMPORTS
 # =============================================================================
 import sys
-import pydot
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from io import BytesIO, StringIO
+from io import BytesIO
 from PIL import Image
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor,\
-                         plot_tree, export_graphviz
-try: 
-    from dtree_string import changeDtreeString  
-except ModuleNotFoundError:
-    from Python.dtree_string import changeDtreeString         
+                         plot_tree
+        
 # =============================================================================
 # DEMO DATA
 # =============================================================================
@@ -43,7 +39,7 @@ MAKE_NUM_THRESH = 0.95
 MAX_CLASSES = 10
 CAT_LIMIT = 10
 COL_LIMIT = 100
-SEP = '$!@'
+SEP = '_'
 RANDOM_STATE = 99
 
 #assert MAX_CLASSES <= CAT_LIMIT
@@ -299,37 +295,28 @@ def trainTree(df, PROB, response, RANDOM_STATE):
     
     return dtree
 
-def genTreeGV(df, dtree, class_names, response, PROB, SEP, dpi=300,\
-              title_size=8):
+def genTree(df, dtree, class_names, response, PROB,\
+            w=14, h=6, dpi=300, fontsize=8):
     '''
-    Generates and saves a drawn dtree to memory using pydot and graphviz
+    generates (& displays) a drawn dtree
     '''
-    #export to gv
-    dot_data = StringIO()  
-    export_graphviz(dtree, out_file=dot_data,\
-                    feature_names=df.drop(response, axis=1).columns,\
-                    class_names=class_names, filled=True, rounded=True,\
-                    precision=2, proportion=True, impurity=False)
+    #TODO test figsize on variety of screens
+    fig, axes = plt.subplots(nrows = 1,ncols = 1,figsize = (w, h), dpi=dpi)
+    plot_tree(dtree, feature_names=df.drop(response, axis=1).columns,\
+              class_names=class_names, filled=True, rounded=True, precision=2,\
+              proportion=True, impurity=False, fontsize=fontsize)
     
-    #Edit the string that makes the tree
-    d_str = dot_data.getvalue()    
-    d_str = changeDtreeString(d_str, SEP, class_names)
-        
-    #create png and save to memory
-    graph = pydot.graph_from_dot_data(d_str)[0]
-    graph.set_dpi(dpi)
-    mem_fig_gv = BytesIO(graph.create_png())
-    image_png = Image.open(mem_fig_gv)
-    
-    #Add title to chart
-    fig, axes = plt.subplots(nrows = 1,ncols = 1, dpi=dpi)
     axes.title.set_text(f'{PROB} Decision Tree for {response}')
-    axes.title.set_fontsize(title_size)
-    plt.axis('off')
-    imgplot = plt.imshow(image_png)
     
-    return fig
+    #save as image to memory
+    mem_fig = BytesIO()
+    fig.savefig(mem_fig)
+    
+    print('\nTree nodes looking at bit small?',\
+          '\nTry renaming you columns with less characters\n')
         
+    return mem_fig
+                
 # =============================================================================
 # EXECUTE
 # =============================================================================
@@ -382,6 +369,10 @@ if __name__ =='__main__':
     #train a tree
     dtree = trainTree(df, PROB, response, RANDOM_STATE)
     
-    #graphviz tree image
-    imgplot = genTreeGV(df, dtree, class_names, response, PROB, SEP, dpi=250)
-    plt.show()
+    #generate the tree graphic to BytesIO
+    mem_fig = genTree(df, dtree, class_names, response, PROB,\
+                      w=14, h=6, dpi=125, fontsize=8)
+    
+    #render in console
+    mem_fig.seek(0)
+    image_plot = Image.open(mem_fig)
