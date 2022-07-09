@@ -14,10 +14,7 @@ import shutil
 import streamlit as st
 from PIL import Image
 
-try: 
-    import Python.dtree_modelling as dtm 
-except ModuleNotFoundError:
-    import dtree_modelling as dtm        
+import Python.dtree_modelling as dtm 
 
 # =============================================================================
 # CONSTANTS
@@ -60,19 +57,15 @@ def editIndexFile():
     st_dir = os.path.join(os.path.dirname(st.__file__), 'static')
     
     #replace the index file there with one in current dir
-    shutil.copyfile('index.html', os.path.join(st_dir, 'index.html'))
+    shutil.copyfile('Python/index.html', os.path.join(st_dir, 'index.html'))
     
     #replace favicon image too
-    shutil.copyfile('favicon.png', os.path.join(st_dir, 'favicon.png'))
+    shutil.copyfile('Python/favicon.png', os.path.join(st_dir, 'favicon.png'))
         
 def main():
     '''
     The Streamlit app
     '''
-    #streamlit cloud specific
-    if os.getcwd()[-6:] != 'Python':
-        os.chdir('Python')
-    
     #replace default html template
     editIndexFile()
     
@@ -98,13 +91,13 @@ def main():
                          'your column headers.')
         st.sidebar.write('*It helps to remove columns that you don’t think ' +\
                          'are relevant such as id columns.')
-        image = Image.open(r'../Images/iris_table_format.PNG')
+        image = Image.open(r'Images/iris_table_format.PNG')
         st.sidebar.image(image, use_column_width=True)
         
         st.sidebar.write('Drag and drop your csv file into the upload box ' +\
                          'or find your data by selecting the ' +\
                          '“browse files” button.')
-        image = Image.open(r'../Images/dragNdrop.PNG')
+        image = Image.open(r'Images/dragNdrop.PNG')
         st.sidebar.image(image, use_column_width=True)
         
         st.sidebar.write('Select the column for the variable you are ' +\
@@ -116,12 +109,12 @@ def main():
                          'predict some kind of quantity or continuous value.')
         st.sidebar.write('Select the “Create Decision Tree” button ' +\
                          'to generate your tree.')
-        image = Image.open(r'../Images/iris_tree.png')
+        image = Image.open(r'Images/iris_tree.png')
         st.sidebar.image(image, use_column_width=True)
         
         st.sidebar.markdown('Click the icon at the top right of the Tree ' +\
                             'to enlarge the image')
-        image = Image.open(r'../Images/enlarge_icon.PNG')
+        image = Image.open(r'Images/enlarge_icon.PNG')
         st.sidebar.image(image)
         
         st.sidebar.markdown('__Interpreting Nodes__')
@@ -135,7 +128,7 @@ def main():
         st.sidebar.markdown('The color is an indication of how sure the ' +\
                             'tree is of its class prediction. ' +\
                             'The darker the color, the more sure it is.')
-        image = Image.open(r'../Images/class_nodes.PNG')
+        image = Image.open(r'Images/class_nodes.PNG')
         st.sidebar.image(image, use_column_width=True)
         
         st.sidebar.markdown('__Regression:__')
@@ -146,7 +139,7 @@ def main():
         st.sidebar.markdown('The color reflects the magnitude of the ' +\
                             'value. The larger the value, the darker the ' +\
                             'color.')
-        image = Image.open(r'../Images/reg_nodes.PNG')
+        image = Image.open(r'Images/reg_nodes.PNG')
         st.sidebar.image(image, use_column_width=True)
         
         st.sidebar.markdown(f'Check out this [link]({BLOG}) ' +\
