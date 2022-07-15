@@ -52,15 +52,15 @@ The actual html template and favicon are edited. The script has to copy them fro
 
 ##
 
-**Docker: **Dockerised the app so that it could be easily deployed on AWS.
+**Docker:** Dockerised the app so that it could be easily deployed on AWS.
 
-**AWS Elastic Beanstalk: **Works well with Docker to keep deployment simple.
+**AWS Elastic Beanstalk:** Works well with Docker to keep deployment simple.
 
-**AWS Route 53: **Allowed me to have a custom domain name for the app (CreateDecisionTree.com)
+**AWS Route 53:** Allowed me to have a custom domain name for the app (CreateDecisionTree.com)
 
-**AWS Certificate Manager: **Secure the app with https (requires load balancing)
+**AWS Certificate Manager:** Secure the app with https (requires load balancing)
 
-**Google Analytics: **Embedded trackers into the app so that I could keep an eye on traffic.
+**Google Analytics:** Embedded trackers into the app so that I could keep an eye on traffic.
 
 More info on the tech used here: [making_of_app](https://github.com/Joseph-Foley/display_dtree_webapp/blob/main/Docs/Making_of_app.md "Title")
 
